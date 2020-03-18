@@ -22,9 +22,8 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-
 $app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new lbs\command\control\MobileController($this))->test($rq, $rs, $args);
+    return (new GeoQuizz\Mobile\control\MobileController($this))->test($rq, $rs, $args);
 });
 
 $app->run();

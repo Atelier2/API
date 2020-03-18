@@ -15,6 +15,7 @@ $db->bootEloquent();
 $errors = require '../src/commons/errors/errors.php';
 $configuration = new \Slim\Container(['settings' => ['displayErrorDetails' => true]]);
 $app_config = array_merge($errors);
+
 $app = new \Slim\App([
     'settings' => [
         'displayErrorDetails' => true,
@@ -22,9 +23,8 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-
 $app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new lbs\command\control\BackofficeController($this))->test($rq, $rs, $args);
+    return (new GeoQuizz\Backoffice\control\BackofficeController($this))->test($rq, $rs, $args);
 });
 
 $app->run();

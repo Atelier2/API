@@ -1,7 +1,7 @@
 <?php
 
 
-namespace lbs\command\control;
+namespace GeoQuizz\Mobile\commons\middlewares;
 
 use Firebase\JWT\JWT;
 use \lbs\common\bootstrap\Eloquent;

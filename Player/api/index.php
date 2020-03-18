@@ -22,9 +22,8 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-
 $app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new lbs\command\control\PlayerController($this))->test($rq, $rs, $args);
+    return (new GeoQuizz\Player\control\PlayerController($this))->test($rq, $rs, $args);
 });
 
 $app->run();

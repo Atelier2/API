@@ -1,6 +1,6 @@
 <?php
 
-namespace lbs\command\control;
+namespace GeoQuizz\Backoffice\commons\Validators;
 
 use \Respect\Validation\Validator as v;
 

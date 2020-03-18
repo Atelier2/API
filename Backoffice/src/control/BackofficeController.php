@@ -1,6 +1,6 @@
 <?php
 
-namespace lbs\command\control;
+namespace GeoQuizz\Backoffice\control;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use lbs\command\model\Item as item;
@@ -23,7 +23,8 @@ class BackofficeController
     {
         $rs = $resp->withStatus(200)
             ->withHeader('Content-Type', 'application/json;charset=utf-8');
-        $rs->getBody()->write(json_encode("test"));
+        $rs->getBody()->write(json_encode("test API backoffice"));
         return $rs;
     }
+
 }
