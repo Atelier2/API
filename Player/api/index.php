@@ -2,6 +2,8 @@
 require '../src/vendor/autoload.php';
 
 use GeoQuizz\Player\commons\database\DatabaseConnection;
+use GeoQuizz\Player\commons\middlewares\CORS;
+use GeoQuizz\Player\control\PlayerController;
 
 $settings = require_once "../src/conf/settings.php";
 $errorsHandlers = require_once "../src/commons/errors/errorHandlers.php";
@@ -12,8 +14,13 @@ $app = new \Slim\App($container);
 
 DatabaseConnection::startEloquent(($app->getContainer())->settings['dbconf']);
 
-$app->get('/series[/]', \GeoQuizz\Player\control\PlayerController::class.':getSeries');
-$app->get('/series/{id}[/]', \GeoQuizz\Player\control\PlayerController::class.':getSeriesWithId');
-$app->post('/game[/]', \GeoQuizz\Player\control\PlayerController::class.':createGame');
+$app->get('/series[/]', PlayerController::class.':getSeries')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/series/{id}[/]', PlayerController::class.':getSeriesWithId')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->post('/game[/]', PlayerController::class.':createGame')
+    ->add(CORS::class.':addCORSHeaders');
 
 $app->run();

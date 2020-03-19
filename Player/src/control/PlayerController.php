@@ -14,7 +14,7 @@ class PlayerController {
         $this->container = $container;
     }
 
-    public static function getSeries(Request $request, Response $response, $args) {
+    public function getSeries(Request $request, Response $response, $args) {
         $series = Series::all();
 
         $response = Writer::jsonResponse($response, 200, [
@@ -25,7 +25,7 @@ class PlayerController {
         return $response;
     }
 
-    public static function getSeriesWithId(Request $request, Response $response, $args) {
+    public function getSeriesWithId(Request $request, Response $response, $args) {
         try {
             $series = Series::query()->where('id', '=', $args['id'])->firstOrFail();
 
@@ -44,7 +44,7 @@ class PlayerController {
         return $response;
     }
 
-    public static function createGame(Request $request, Response $response, $args) {
+    public function createGame(Request $request, Response $response, $args) {
         // TODO: token JWT and data validator
     }
 }
