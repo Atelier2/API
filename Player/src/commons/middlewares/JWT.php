@@ -17,13 +17,12 @@ class JWT {
     }
 
     public function checkJWT(Request $request, Response $response, callable $next) {
-        $authHeader = $request->getHeader("Authorization")[0];
+        $authHeader = !empty($request->getHeader("Authorization")) ? $request->getHeader("Authorization")[0] : null;
 
         if (!empty($authHeader) and strpos($authHeader, "Bearer") !== false) {
             try {
                 $tokenstring = sscanf($authHeader, "Bearer %s")[0];
-                $token = FirebaseJWT::decode($tokenstring, $this->container->settings['JWT_secret'], ['HS512']);
-                $request = $request->withAttribute("token", $token);
+                FirebaseJWT::decode($tokenstring, $this->container->settings['JWT_secret'], ['HS512']);
 
                 return $next($request, $response);
             } catch (ExpiredException $e) {
