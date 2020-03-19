@@ -39,10 +39,10 @@ class Middleware
         $getHeader_value = substr($getHeader, 6);
         $getHeader_value_decode = base64_decode($getHeader_value);
         $dote_position = strpos($getHeader_value_decode, ':');
-        $user_name = substr($getHeader_value_decode, 0, $dote_position);
-        $user_passwd = substr($getHeader_value_decode, $dote_position + 1);
-        $rq = $rq->withAttribute("user_name", $user_name);
-        $rq = $rq->withAttribute("user_passwd", $user_passwd);
+        $user_email = substr($getHeader_value_decode, 0, $dote_position);
+        $user_password = substr($getHeader_value_decode, $dote_position + 1);
+        $rq = $rq->withAttribute("user_email", $user_email);
+        $rq = $rq->withAttribute("user_password", $user_password);
         return $next($rq, $rs);
     }
 
