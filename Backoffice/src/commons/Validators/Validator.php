@@ -10,16 +10,14 @@ class Validator
     {
         return
             [
-                'nom' => v::StringType()->alpha(),
-                'mail' => v::email(),
-                'livraison' => [
-                    'date' => v::date('d-m-Y')->min('now'),
-                    'heure' => v::date('H:i'),
-                ],
-                "client_id" => v::optional(v::intVal()),
-                "items" => v::arrayVal()->each(v::arrayVal()
-                    ->key('uri', v::stringType())
-                    ->key('q', v::intVal()))
+                'firstname' => v::StringType()->alpha(),
+                'lastname' => v::StringType()->alpha(),
+                'email' => v::email(),
+                'phone' => v::phone(),
+                'street_number' => v::intVal(),
+                'street' => v::StringType()->alpha(),
+                'city' => v::stringType()->alpha(),
+                'zip_code' => v::intVal(),
             ];
     }
 }
