@@ -3,9 +3,9 @@ namespace GeoQuizz\Player\model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model {
-    protected $table = 'user';
+class Game extends Model {
+    protected $table = 'game';
     protected $primaryKey = 'id';
-    public $timestamps = true;
+    public $timestamps = false;
     public $incrementing = false;
 }
