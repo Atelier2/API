@@ -23,8 +23,8 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-$app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Backoffice\control\BackofficeController($this))->test($rq, $rs, $args);
-});
+$app->post('/user/signin', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignin($rq, $rs, $args);
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
 
 $app->run();
