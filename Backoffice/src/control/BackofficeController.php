@@ -76,9 +76,14 @@ class BackofficeController
             $rs->getBody()->write(json_encode("votre compte utilisateur a bien été crée"));
             return $rs;
         } else {
+            $errors = $req->getAttribute('errors');
+            $errorsArray = array();
+            foreach ($errors as $error) {
+                $errorsArray["error"][] = $error[0];
+            }
             $rs = $resp->withStatus(401)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'erreur dans les credentials']));
+            $rs->getBody()->write(json_encode($errorsArray["error"]));
             return $rs;
         }
     }
