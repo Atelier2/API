@@ -79,7 +79,7 @@ class GameController {
             return Writer::jsonResponse($response, 400, [
                 "type" => "error",
                 "error" => 400,
-                "message" => "At least one of the fields is empty. Fields 'username' and 'id_status' must be provided."
+                "message" => "At least one of the fields is empty. Fields 'username' and 'id_series' must be provided."
             ]);
         }
     }

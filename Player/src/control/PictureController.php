@@ -1,39 +1,28 @@
 <?php
 namespace GeoQuizz\Player\control;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use GeoQuizz\Player\commons\Writers\Writer;
+use GeoQuizz\Player\model\Game;
 use GeoQuizz\Player\model\Series;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
-class SeriesController {
+class PictureController {
     protected $container;
 
     public function __construct(\Slim\Container $container = null) {
         $this->container = $container;
     }
 
-    public function getSeries(Request $request, Response $response, $args) {
-        // TODO: Get dynamic value from nb_pictures column in where clause
-        //$series = Series::has('pictures', '>=', 'NB_PICTURES');
-        $series = Series::all();
-
-        $response = Writer::jsonResponse($response, 200, [
-            "type" => "resources",
-            "series" => $series
-        ]);
-
-        return $response;
-    }
-
-    public function getSeriesWithId(Request $request, Response $response, $args) {
+    public function getPicturesOfOneSeries(Request $request, Response $response, $args) {
         try {
             $series = Series::query()->where('id', '=', $args['id'])->firstOrFail();
+            $pictures = $series->pictures()->inRandomOrder()->limit($series->nb_pictures)->get();
 
             $response = Writer::jsonResponse($response, 200, [
-                "type" => "resource",
-                "series" => $series
+                "type" => "resources",
+                "pictures" => $pictures
             ]);
         } catch (ModelNotFoundException $exception) {
             $response = Writer::jsonResponse($response, 404, [
