@@ -1,7 +1,7 @@
 <?php
 namespace GeoQuizz\Player\commons\middlewares;
 
-use GeoQuizz\Player\commons\Writers\Writer;
+use GeoQuizz\Player\commons\Writers\JSON;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Firebase\JWT\JWT as FirebaseJWT;
@@ -25,37 +25,22 @@ class JWT {
                 FirebaseJWT::decode($tokenstring, $this->container->settings['JWT_secret'], ['HS512']);
 
                 return $next($request, $response);
+
             } catch (ExpiredException $e) {
-                return Writer::jsonResponse($response, 401, [
-                    "type" => "error",
-                    "error" => 401,
-                    "message" => "Token expired."
-                ]);
+                return JSON::errorResponse($response, 401, "Token expired.");
+
             } catch (SignatureInvalidException $e) {
-                return Writer::jsonResponse($response, 401, [
-                    "type" => "error",
-                    "error" => 401,
-                    "message" => "Invalid signature."
-                ]);
+                return JSON::errorResponse($response, 401, "Invalid signature.");
+
             } catch (BeforeValidException $e) {
-                return Writer::jsonResponse($response, 401, [
-                    "type" => "error",
-                    "error" => 401,
-                    "message" => "Token not valid yet."
-                ]);
+                return JSON::errorResponse($response, 401, "Token not valid yet.");
+
             } catch (\UnexpectedValueException $e) {
-                return Writer::jsonResponse($response, 401, [
-                    "type" => "error",
-                    "error" => 401,
-                    "message" => "Unexpected value in the token."
-                ]);
+                return JSON::errorResponse($response, 401, "Unexpected value in the token.");
+
             }
         } else {
-            return Writer::jsonResponse($response, 401, [
-                'type' => 'error',
-                'error' => 401,
-                'message' => "No token was provided in Authorization or it's not formatted correctly. Format: Bearer <token>"
-            ]);
+            return JSON::errorResponse($response, 401, "No token was provided in Authorization or it's not formatted correctly. Format: Bearer <token>");
         }
     }
 }

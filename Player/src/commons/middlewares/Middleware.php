@@ -3,7 +3,7 @@ namespace GeoQuizz\Player\commons\middlewares;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use GeoQuizz\Player\commons\Writers\Writer;
+use GeoQuizz\Player\commons\Writers\JSON;
 
 class Middleware {
     public function checkAuthorization(Request $request, Response $response, callable $next) {
@@ -11,11 +11,7 @@ class Middleware {
             $request = $request->withAttribute("getHeader", $getHeader);
             return $next($request, $response);
         } else {
-            return Writer::jsonResponse($response, 401, [
-                'type' => 'error',
-                'error' => 401,
-                'message :' => 'No data was found in Basic Authorization.'
-            ]);
+            return JSON::errorResponse($response, 401, "No data was found in Basic Authorization.");
         }
     }
 
@@ -38,15 +34,7 @@ class Middleware {
             $request = $request->withAttribute("token", $token);
             return $next($request, $response);
         } else {
-            $response = $response->withStatus(401)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $response->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'no token found in URL']));
-
-
-            return Writer::jsonResponse($response, 401, [
-                'type' => 'error',
-                'error' => 401,
-                'message :' => 'no token found in URL']);
+            return JSON::errorResponse($response, 401, "No token found in URL.");
         }
     }
 

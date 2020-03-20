@@ -3,7 +3,7 @@ namespace GeoQuizz\Player\control;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use GeoQuizz\Player\commons\Writers\Writer;
+use GeoQuizz\Player\commons\Writers\JSON;
 use GeoQuizz\Player\model\Series;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -15,34 +15,28 @@ class SeriesController {
     }
 
     public function getSeries(Request $request, Response $response, $args) {
-        // TODO: Get dynamic value from nb_pictures column in where clause
-        //$series = Series::has('pictures', '>=', 'NB_PICTURES');
-        $series = Series::all();
+        $series = Series::query()
+            ->join('series_pictures', 'series.id', '=', 'series_pictures.id')
+            ->groupBy('series.id')
+            ->havingRaw('COUNT(*)>= series.nb_pictures')
+            ->get();
 
-        $response = Writer::jsonResponse($response, 200, [
+        return JSON::successResponse($response, 200, [
             "type" => "resources",
             "series" => $series
         ]);
-
-        return $response;
     }
 
     public function getSeriesWithId(Request $request, Response $response, $args) {
         try {
             $series = Series::query()->where('id', '=', $args['id'])->firstOrFail();
 
-            $response = Writer::jsonResponse($response, 200, [
+            return JSON::successResponse($response, 200, [
                 "type" => "resource",
                 "series" => $series
             ]);
         } catch (ModelNotFoundException $exception) {
-            $response = Writer::jsonResponse($response, 404, [
-                "type" => "error",
-                "error" => 404,
-                "message" => "Series with ID ".$args['id']." not found."
-            ]);
+            return JSON::errorResponse($response, 404, "Series with ID ".$args['id']." not found.");
         }
-
-        return $response;
     }
 }

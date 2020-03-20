@@ -33,6 +33,9 @@ $app->get('/games/{id}[/]', GameController::class.':getGameWithId')
 $app->post('/games[/]', GameController::class.':createGame')
     ->add(CORS::class.':addCORSHeaders');
 
+$app->put('/games/{id}[/]', GameController::class.':updateGame')
+    ->add(CORS::class.':addCORSHeaders');
+
 $app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })
     ->add(CORS::class.':addCORSHeaders');
 

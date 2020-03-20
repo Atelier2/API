@@ -1,7 +1,7 @@
 <?php
 namespace GeoQuizz\Player\control;
 
-use GeoQuizz\Player\commons\Writers\Writer;
+use GeoQuizz\Player\commons\Writers\JSON;
 use GeoQuizz\Player\model\Game;
 use GeoQuizz\Player\model\Series;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,19 +21,13 @@ class GameController {
         try {
             $game = Game::query()->where('id', '=', $args['id'])->firstOrFail();
 
-            $response = Writer::jsonResponse($response, 200, [
+            return JSON::successResponse($response, 200, [
                 "type" => "resource",
                 "series" => $game
             ]);
         } catch (ModelNotFoundException $exception) {
-            $response = Writer::jsonResponse($response, 404, [
-                "type" => "error",
-                "error" => 404,
-                "message" => "Game with ID ".$args['id']." not found."
-            ]);
+            return JSON::errorResponse($response, 404, "Game with ID ".$args['id']." not found.");
         }
-
-        return $response;
     }
 
     public function createGame(Request $request, Response $response, $args) {
@@ -58,29 +52,41 @@ class GameController {
                 $game->id_series = $body['id_series'];
                 $game->saveOrFail();
 
-                return Writer::jsonResponse($response, 201, [
+                return JSON::successResponse($response, 201, [
                     "type" => "resource",
                     "game" => $game
                 ]);
             } catch (ModelNotFoundException $exception) {
-                return Writer::jsonResponse($response, 404, [
-                    "type" => "error",
-                    "error" => 404,
-                    "message" => "Series with ID ".$body['id_series']." not found."
-                ]);
+                return JSON::errorResponse($response, 404, "Series with ID ".$body['id_series']." not found.");
+
             } catch (\Throwable $exception) {
-                return Writer::jsonResponse($response, 500, [
-                    "type" => "error",
-                    "error" => 500,
-                    "message" => "The creation of the game failed."
-                ]);
+                return JSON::errorResponse($response, 500, "The creation of the game failed.");
+
             }
         } else {
-            return Writer::jsonResponse($response, 400, [
-                "type" => "error",
-                "error" => 400,
-                "message" => "At least one of the fields is empty. Fields 'username' and 'id_series' must be provided."
+            return JSON::errorResponse($response, 400, "At least one of the fields is empty. Fields 'username' and 'id_series' must be provided.");
+        }
+    }
+
+    public function updateGame(Request $request, Response $response, $args) {
+        $body = $request->getParsedBody();
+
+        try {
+            $game = Game::query()->where('id', '=', $args['id'])->firstOrFail();
+
+            $game->score = isset($body['score']) ? $body['score'] : $game->score;
+            $game->id_status = isset($body['id_status']) ? $body['id_status'] : $game->id_status;
+            $game->saveOrFail();
+
+            return JSON::successResponse($response, 200, [
+                "type" => "resource",
+                "game" => $game
             ]);
+        } catch (ModelNotFoundException $exception) {
+            return JSON::errorResponse($response, 404, "Game with ID ".$args['id']." not found.");
+
+        } catch (\Throwable $exception) {
+            return JSON::errorResponse($response, 500, "The update of the game failed. Error: ".$exception->getMessage());
         }
     }
 }
