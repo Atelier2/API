@@ -4,6 +4,8 @@ require '../src/vendor/autoload.php';
 use GeoQuizz\Player\commons\database\DatabaseConnection;
 use GeoQuizz\Player\commons\middlewares\CORS;
 use GeoQuizz\Player\commons\middlewares\JWT;
+use DavidePastore\Slim\Validation\Validation;
+use GeoQuizz\Player\commons\middlewares\Validator;
 use GeoQuizz\Player\control\SeriesController;
 use GeoQuizz\Player\control\GameController;
 use GeoQuizz\Player\control\PictureController;
@@ -31,9 +33,14 @@ $app->get('/games/{id}[/]', GameController::class.':getGameWithId')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->post('/games[/]', GameController::class.':createGame')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(new Validation(Validator::createGameValidator()))
     ->add(CORS::class.':addCORSHeaders');
 
 $app->put('/games/{id}[/]', GameController::class.':updateGame')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(new Validation(Validator::updateGameValidator()))
+    ->add(JWT::class.':checkJWT')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })

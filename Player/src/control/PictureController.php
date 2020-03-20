@@ -1,7 +1,7 @@
 <?php
 namespace GeoQuizz\Player\control;
 
-use GeoQuizz\Player\commons\Writers\JSON;
+use GeoQuizz\Player\commons\writers\JSON;
 use GeoQuizz\Player\model\Series;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;

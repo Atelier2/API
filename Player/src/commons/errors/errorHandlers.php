@@ -2,7 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use GeoQuizz\Player\commons\Writers\JSON;
+use GeoQuizz\Player\commons\writers\JSON;
 
 return [
     'notFoundHandler' => function ($container) {

@@ -1,5 +1,5 @@
 <?php
-namespace GeoQuizz\Player\commons\Writers;
+namespace GeoQuizz\Player\commons\writers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
