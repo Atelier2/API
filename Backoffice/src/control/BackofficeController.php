@@ -47,7 +47,10 @@ class BackofficeController
                 return $rs;
             }
         } else {
-            echo "aucun compte ne correspond à cette adresse email.";
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'aucun compte ne correspond à cette adresse email']));
+            return $rs;
         }
     }
 
