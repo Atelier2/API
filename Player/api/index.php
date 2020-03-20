@@ -8,7 +8,6 @@ use DavidePastore\Slim\Validation\Validation;
 use GeoQuizz\Player\commons\middlewares\Validator;
 use GeoQuizz\Player\control\SeriesController;
 use GeoQuizz\Player\control\GameController;
-use GeoQuizz\Player\control\PictureController;
 
 $settings = require_once "../src/conf/settings.php";
 $errorsHandlers = require_once "../src/commons/errors/errorHandlers.php";
@@ -25,7 +24,7 @@ $app->get('/series[/]', SeriesController::class.':getSeries')
 $app->get('/series/{id}[/]', SeriesController::class.':getSeriesWithId')
     ->add(CORS::class.':addCORSHeaders');
 
-$app->get('/series/{id}/pictures[/]', PictureController::class.':getPicturesOfOneSeries')
+$app->get('/series/{id}/pictures[/]', SeriesController::class.':getPicturesOfOneSeries')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->get('/games/{id}[/]', GameController::class.':getGameWithId')

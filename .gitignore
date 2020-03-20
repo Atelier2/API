@@ -93,15 +93,8 @@ nbdist/
 .nb-gradle/
 ### Composer template
 composer.phar
-/vendor/
+vendor/
 
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
-
-/Backoffice/src/vendor/
-/Mobile/src/vendor/
-/Player/src/vendor/
-/doc/api.doc/docs/
-.idea/inspectionProfiles/
-doc/internals/
