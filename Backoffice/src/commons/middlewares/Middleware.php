@@ -46,8 +46,7 @@ class Middleware
         return $next($rq, $rs);
     }
 
-
-    function checkToken(Request $rq, Response $rs, callable $next)
+    public function checkToken(Request $rq, Response $rs, callable $next)
     {
         if (!empty($rq->getQueryParams('token', null))) {
             $token = $rq->getQueryParams("token");
@@ -61,7 +60,7 @@ class Middleware
         }
     }
 
-    function getToken(Request $rq, Response $rs, callable $next)
+    public function getToken(Request $rq, Response $rs, callable $next)
     {
         $token = $rq->getAttribute("token");
         $token = $token["token"];
@@ -103,7 +102,7 @@ class Middleware
     }
 
 
-    function decodeJWT(Request $rq, Response $rs, callable $next)
+    public function decodeJWT(Request $rq, Response $rs, callable $next)
     {
         try {
             $h = $rq->getHeader('Authorization')[0];

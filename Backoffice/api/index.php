@@ -24,9 +24,13 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS');
+
 $app->post('/user/signup', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignup($rq, $rs, $args);
-})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validators()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
 
 $app->post('/user/signin', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignin($rq, $rs, $args);
