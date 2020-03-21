@@ -22,8 +22,63 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
-$app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->test($rq, $rs, $args);
-});
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+})->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS');
+
+/*Ajoute une photo*/
+$app->post('/picture[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->addPicture($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
+    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS');/*
+    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');*/
+
+/*Récupère toutes les photos*/
+$app->get('/picture[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->getPictures($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
+/*->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT')*/;
+
+/*Récupère une photo voulu*/
+$app->get('/picture/{id}[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->getPictureId($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')/*
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT')*/;
+
+
+/*Ajoute une série*/
+$app->post('/series[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->createSerie($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
+/*->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT')*/;
+
+/*Récupère une série en particulier*/
+$app->get('/series/{id}[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->getSerieId($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
+/*->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT')*/;
+
+/*Récupère les séries*/
+$app->get('/series[/]', function ($rq, $rs, $args) {
+    return (new GeoQuizz\Mobile\control\MobileController($this))->getSeries($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
+/*->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT')*/;
 
 $app->run();
