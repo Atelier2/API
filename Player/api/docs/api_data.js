@@ -72,6 +72,46 @@ define({ "api": [
     "name": "GetGamesId"
   },
   {
+    "type": "get",
+    "url": "/games/leaderboard?page=:page&size=:size",
+    "title": "Liste",
+    "group": "Games",
+    "description": "<p>Récupère toutes les Games classées par le score.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": true,
+            "field": "page",
+            "description": "<p>Le numéro de la page à afficher.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": true,
+            "field": "size",
+            "description": "<p>Le nombre de Games à affciher par page.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"next\": {\n      \"href\": \"http://api.player.local:19180/games/leaderboard?page=2&size=2\"\n    },\n    \"prev\": {\n      \"href\": \"http://api.player.local:19180/games/leaderboard?page=0&size=2\"\n    },\n    \"last\": {\n      \"href\": \"http://api.player.local:19180/games/leaderboard?page=5&size=2\"\n    },\n    \"first\": {\n      \"href\": \"http://api.player.local:19180/games/leaderboard?page=1&size=2\"\n    }\n  },\n  \"games\": [\n    {\n      \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1500,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"5a705236-4414-45fc-aed5-496j47b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1000,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "src/control/GameController.php",
+    "groupTitle": "Games",
+    "name": "GetGamesLeaderboardPagePageSizeSize"
+  },
+  {
     "type": "post",
     "url": "/games/",
     "title": "Créer",
