@@ -119,6 +119,33 @@ class BackofficeController
     }
 
 
+    public function insertPicture(Request $req, Response $resp, array $args)
+    {
+        if (!$req->getAttribute('errors')) {
+            $token = $req->getAttribute("token");
+            $picture = new picture();
+            $getParsedBody = $req->getParsedBody();
+            $picture->id = Uuid::uuid4();
+            $picture->description = filter_var($getParsedBody["description"], FILTER_SANITIZE_STRING);
+            $picture->latitude = filter_var($getParsedBody["latitude"], FILTER_SANITIZE_STRING);
+            $picture->longitude = filter_var($getParsedBody["longitude"], FILTER_SANITIZE_STRING);
+            $picture->link = filter_var($getParsedBody["link"], FILTER_VALIDATE_URL);
+            $picture->id_user = $token->uid;
+            $picture->save();
+            $rs = $resp->withStatus(201)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("la photo a bien été enregistré"));
+            return $rs;
+        } else {
+            $errors = $req->getAttribute('errors');
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+
     public function insertPictureSeries(Request $req, Response $resp, array $args)
     {
         if ($series = series::find($args["id"])) {
