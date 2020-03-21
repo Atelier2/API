@@ -6,20 +6,51 @@ use \Respect\Validation\Validator as v;
 
 class Validator
 {
-    public static function validators()
+    public static function validatorsPictures()
     {
         return
             [
-                'nom' => v::StringType()->alpha(),
-                'mail' => v::email(),
-                'livraison' => [
-                    'date' => v::date('d-m-Y')->min('now'),
-                    'heure' => v::date('H:i'),
-                ],
-                "client_id" => v::optional(v::intVal()),
-                "items" => v::arrayVal()->each(v::arrayVal()
-                    ->key('uri', v::stringType())
-                    ->key('q', v::intVal()))
+                'description' => v::StringType()->alpha(),
+                'latitude' => v::notEmpty(),
+                'longitude' => v::notEmpty(),
+                'link' => v::url()->notEmpty()
+            ];
+    }
+
+    public static function validatorsSeriesPictures()
+    {
+        return
+            [
+                'description' => v::StringType()->alpha(),
+                'distance' => v::intType()->notEmpty(),
+                'latitude' => v::notEmpty(),
+                'longitude' => v::notEmpty(),
+                'zoom' => v::intType()->notEmpty(),
+                'nb_pictures' => v::intType()->notEmpty()
+            ];
+    }
+
+    public static function validatorsUsers()
+    {
+        return
+            [
+                'firstname' => v::StringType()->alpha(),
+                'lastname' => v::StrinType()->notEmpty(),
+                'email' => v::email(),
+                'phone' => v::phone(),
+                'street_number' => v::intType()->notEmpty(),
+                'street' => v::StringType()->notEmpty(),
+                'city' => v::StringType()->notEmpty(),
+                'zip_code' => v::StringType()->notEmpty()
+            ];
+    }
+
+    public static function validatorsGame()
+    {
+        return
+            [
+                'score' => v::intType()->alpha(),
+                'pseudo' => v::StrinType()->notEmpty()
             ];
     }
 }
