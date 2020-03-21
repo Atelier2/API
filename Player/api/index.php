@@ -6,6 +6,7 @@ use GeoQuizz\Player\commons\middlewares\CORS;
 use GeoQuizz\Player\commons\middlewares\JWT;
 use DavidePastore\Slim\Validation\Validation;
 use GeoQuizz\Player\commons\middlewares\Validator;
+use GeoQuizz\Player\control\DocsController;
 use GeoQuizz\Player\control\SeriesController;
 use GeoQuizz\Player\control\GameController;
 
@@ -43,6 +44,12 @@ $app->put('/games/{id}[/]', GameController::class.':updateGame')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/docs[/]', DocsController::class.':renderDocsHtmlFile')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/', DocsController::class.':redirectTowardsDocs')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->run();
