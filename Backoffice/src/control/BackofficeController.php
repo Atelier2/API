@@ -24,7 +24,7 @@ class BackofficeController
     {
         $user_email = $req->getAttribute("user_email");
         $user_password = $req->getAttribute("user_password");
-        if ($user = user::where('email', '=', $user_email)->first()) {
+        if ($user = user::where('email', '=', $user_email)->firstOrFail()) {
             if (password_verify($user_password, $user->password)) {
                 $token = JWT::encode(
                     ['iss' => 'http://api.backoffice.local',
@@ -80,13 +80,83 @@ class BackofficeController
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
-            $errorsArray = array();
-            foreach ($errors as $error) {
-                $errorsArray["error"][] = $error[0];
-            }
             $rs = $resp->withStatus(401)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($errorsArray["error"]));
+            $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+
+    public function insertSerie(Request $req, Response $resp, array $args)
+    {
+        if (!$req->getAttribute('errors')) {
+            $token = $req->getAttribute("token");
+            $series = new series();
+            $getParsedBody = $req->getParsedBody();
+            $series->id = Uuid::uuid4();
+            $series->city = filter_var($getParsedBody["city"], FILTER_SANITIZE_STRING);
+            $series->distance = filter_var($getParsedBody["distance"], FILTER_SANITIZE_NUMBER_INT);
+            $series->latitude = filter_var($getParsedBody["latitude"], FILTER_SANITIZE_STRING);
+            $series->longitude = filter_var($getParsedBody["longitude"], FILTER_SANITIZE_STRING);
+            $series->zoom = filter_var($getParsedBody["zoom"], FILTER_SANITIZE_NUMBER_INT);
+            $series->nb_pictures = filter_var($getParsedBody["nb_pictures"], FILTER_SANITIZE_NUMBER_INT);
+            $series->created_at = date("Y-m-d H:i:s");
+            $series->updated_at = date("Y-m-d H:i:s");
+            $series->id_user = $token->uid;
+            $series->save();
+            $rs = $resp->withStatus(201)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("une nouvelle serie a bien été crée"));
+            return $rs;
+        } else {
+            $errors = $req->getAttribute('errors');
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+
+    public function insertPictureSeries(Request $req, Response $resp, array $args)
+    {
+        if ($series = series::find($args["id"])) {
+            $series->series_pictures()->attach("43bd5288-65ef-4e58-9ebd-f19640ae43c9");
+            $rs = $resp->withStatus(201)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("la photo a bien ete enregistre a cette serie."));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("la serie n'existe pas"));
+            return $rs;
+        }
+    }
+
+
+    public function updateSerie(Request $req, Response $resp, array $args)
+    {
+        if (!$req->getAttribute('errors')) {
+            $series = series::findOrFail($args["id"]);
+            $getParsedBody = $req->getParsedBody();
+            $series->city = filter_var($getParsedBody["city"], FILTER_SANITIZE_STRING);
+            $series->distance = filter_var($getParsedBody["distance"], FILTER_SANITIZE_NUMBER_INT);
+            $series->latitude = filter_var($getParsedBody["latitude"], FILTER_SANITIZE_STRING);
+            $series->longitude = filter_var($getParsedBody["longitude"], FILTER_SANITIZE_STRING);
+            $series->zoom = filter_var($getParsedBody["zoom"], FILTER_SANITIZE_NUMBER_INT);
+            $series->nb_pictures = filter_var($getParsedBody["nb_pictures"], FILTER_SANITIZE_NUMBER_INT);
+            $series->save();
+            $rs = $resp->withStatus(201)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("la serie a bien été mise a jour"));
+            return $rs;
+        } else {
+            $errors = $req->getAttribute('errors');
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($errors));
             return $rs;
         }
     }

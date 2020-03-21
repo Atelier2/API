@@ -30,10 +30,22 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 
 $app->post('/user/signup', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignup($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validators()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validatorsUsers()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
 
 $app->post('/user/signin', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignin($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validators()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin');
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validatorsUsers()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin');
+
+$app->post('/series', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->insertSerie($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validatorsSeries()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
+
+$app->put('/series/{id}', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->updateSerie($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validatorsSeries()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
+
+$app->post('/picture/{id}', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->insertPictureSeries($rq, $rs, $args);
+})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Backoffice\commons\Validators\Validator::validatorsPicture()))->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
 
 $app->run();
