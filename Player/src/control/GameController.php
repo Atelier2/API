@@ -18,6 +18,92 @@ class GameController {
     }
 
     /**
+     * @api {get} /games/leaderboard?page=:page&size=:size Liste
+     * @apiGroup Games
+     *
+     * @apiDescription Récupère toutes les Games classées par le score.
+     *
+     * @apiParam {number} [page] Le numéro de la page à afficher.
+     * @apiParam {number} [size] Le nombre de Games à affciher par page.
+     *
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "type": "resources",
+     *       "links": {
+     *         "next": {
+     *           "href": "http://api.player.local:19180/games/leaderboard?page=2&size=2"
+     *         },
+     *         "prev": {
+     *           "href": "http://api.player.local:19180/games/leaderboard?page=0&size=2"
+     *         },
+     *         "last": {
+     *           "href": "http://api.player.local:19180/games/leaderboard?page=5&size=2"
+     *         },
+     *         "first": {
+     *           "href": "http://api.player.local:19180/games/leaderboard?page=1&size=2"
+     *         }
+     *       },
+     *       "games": [
+     *         {
+     *           "id": "5a005636-4514-45cc-a6d5-496847b0adbf",
+     *           "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA",
+     *           "score": 1500,
+     *           "pseudo": "Albert Einstein",
+     *           "id_status": 2,
+     *           "id_series": "8d0eca6-756a-4e3b-9dde-e7a664f562cc"
+     *         },
+     *         {
+     *           "id": "5a705236-4414-45fc-aed5-496j47b0adbf",
+     *           "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA",
+     *           "score": 1000,
+     *           "pseudo": "Albert Einstein",
+     *           "id_status": 2,
+     *           "id_series": "8d0eca6-756a-4e3b-9dde-e7a664f562cc"
+     *         }
+     *       ]
+     *     }
+     */
+    public function getLeaderboard(Request $request, Response $response, $args) {
+        $scheme = $request->getUri()->getScheme();
+        $host = $request->getUri()->getHost();
+        $port = $request->getUri()->getPort();
+        $path = $request->getUri()->getPath();
+        $leaderboardURL = "$scheme://$host:$port$path";
+
+        $total = Game::query()->count();
+        $page = $request->getQueryParam('page', 1);
+        $size = $request->getQueryParam('size', 10);
+
+        $games = Game::query()
+            ->where('score', '!=', 0)
+            ->where('id_status', '=', 2);
+
+        if ($size > $total) {
+            $size = $total;
+            $page = 1;
+        } else if (($page * $size) > $total) {
+            $page = intdiv($total, $size) + 1;
+        }
+
+        $games = $games->offset(($page-1)*$size)
+            ->limit($size)
+            ->orderBy('score', 'desc')
+            ->get();
+
+        return JSON::successResponse($response, 200, [
+            "type" => "resources",
+            "links" => [
+                "next" => ["href" => "$leaderboardURL?page=".($page+1)."&size=$size"],
+                "prev" => ["href" => "$leaderboardURL?page=".($page-1)."&size=$size"],
+                "last" => ["href" => "$leaderboardURL?page=".(intdiv($total, $size) + 1)."&size=$size"],
+                "first" => ["href" => "$leaderboardURL?page=1&size=$size"]
+            ],
+            "games" => $games
+        ]);
+    }
+
+    /**
      * @api {get} /games/:id/ Obtenir
      * @apiGroup Games
      *
@@ -142,7 +228,7 @@ class GameController {
 
             }
         } else {
-            return JSON::errorResponse($response, 400, "At least one of the fields is empty. Fields 'username' and 'id_series' must be provided.");
+            return JSON::errorResponse($response, 400, "At least one of the parameters is empty. Parameters 'username' and 'id_series' must be provided.");
         }
     }
 
