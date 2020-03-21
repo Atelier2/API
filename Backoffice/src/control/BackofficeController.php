@@ -147,11 +147,41 @@ class BackofficeController
             $series->longitude = filter_var($getParsedBody["longitude"], FILTER_SANITIZE_STRING);
             $series->zoom = filter_var($getParsedBody["zoom"], FILTER_SANITIZE_NUMBER_INT);
             $series->nb_pictures = filter_var($getParsedBody["nb_pictures"], FILTER_SANITIZE_NUMBER_INT);
+            $series->updated_at = date("Y-m-d H:i:s");
             $series->save();
             $rs = $resp->withStatus(201)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode("la serie a bien été mise a jour"));
             return $rs;
+        } else {
+            $errors = $req->getAttribute('errors');
+            $rs = $resp->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+    public function updatePicture(Request $req, Response $resp, array $args)
+    {
+        if (!$req->getAttribute('errors')) {
+            if ($pictures = picture::find($args["id"])) {
+                $getParsedBody = $req->getParsedBody();
+                $pictures->description = filter_var($getParsedBody["description"], FILTER_SANITIZE_STRING);
+                $pictures->latitude = filter_var($getParsedBody["latitude"], FILTER_SANITIZE_STRING);
+                $pictures->longitude = filter_var($getParsedBody["longitude"], FILTER_SANITIZE_STRING);
+                $pictures->link = filter_var($getParsedBody["link"], FILTER_VALIDATE_URL);
+                $pictures->save();
+                $rs = $resp->withStatus(201)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode("la photo a bien été mise a jour"));
+                return $rs;
+            } else {
+                $rs = $resp->withStatus(401)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode("Pas de photos correspondantes à cette id"));
+                return $rs;
+            }
         } else {
             $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(401)
