@@ -1,0 +1,9 @@
+{
+  "name": "GeoQuizz - Player API",
+  "version": "0.0.0",
+  "description": "API pour la WebApp de jeu en VueJS.",
+  "apidoc": {
+    "title": "GeoQuizz - Player API",
+    "url" : "https://github.com/Atelier2/API/tree/master/Player"
+  }
+}

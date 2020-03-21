@@ -39,15 +39,14 @@ class Middleware
         $getHeader_value = substr($getHeader, 6);
         $getHeader_value_decode = base64_decode($getHeader_value);
         $dote_position = strpos($getHeader_value_decode, ':');
-        $user_name = substr($getHeader_value_decode, 0, $dote_position);
-        $user_passwd = substr($getHeader_value_decode, $dote_position + 1);
-        $rq = $rq->withAttribute("user_name", $user_name);
-        $rq = $rq->withAttribute("user_passwd", $user_passwd);
+        $user_email = substr($getHeader_value_decode, 0, $dote_position);
+        $user_password = substr($getHeader_value_decode, $dote_position + 1);
+        $rq = $rq->withAttribute("user_email", $user_email);
+        $rq = $rq->withAttribute("user_password", $user_password);
         return $next($rq, $rs);
     }
 
-
-    function checkToken(Request $rq, Response $rs, callable $next)
+    public function checkToken(Request $rq, Response $rs, callable $next)
     {
         if (!empty($rq->getQueryParams('token', null))) {
             $token = $rq->getQueryParams("token");
@@ -61,7 +60,7 @@ class Middleware
         }
     }
 
-    function getToken(Request $rq, Response $rs, callable $next)
+    public function getToken(Request $rq, Response $rs, callable $next)
     {
         $token = $rq->getAttribute("token");
         $token = $token["token"];
@@ -103,7 +102,7 @@ class Middleware
     }
 
 
-    function decodeJWT(Request $rq, Response $rs, callable $next)
+    public function decodeJWT(Request $rq, Response $rs, callable $next)
     {
         try {
             $h = $rq->getHeader('Authorization')[0];

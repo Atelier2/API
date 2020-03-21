@@ -1,29 +1,55 @@
 <?php
 require '../src/vendor/autoload.php';
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use \lbs\common\bootstrap\Eloquent;
-use \DavidePastore\Slim\Validation\Validation as Validation;
+use GeoQuizz\Player\commons\database\DatabaseConnection;
+use GeoQuizz\Player\commons\middlewares\CORS;
+use GeoQuizz\Player\commons\middlewares\JWT;
+use DavidePastore\Slim\Validation\Validation;
+use GeoQuizz\Player\commons\middlewares\Validator;
+use GeoQuizz\Player\control\DocsController;
+use GeoQuizz\Player\control\SeriesController;
+use GeoQuizz\Player\control\GameController;
 
-$config = parse_ini_file("../src/conf/conf.ini");
-$db = new Illuminate\Database\Capsule\Manager();
-$db->addConnection($config);
-$db->setAsGlobal();
-$db->bootEloquent();
+$settings = require_once "../src/conf/settings.php";
+$errorsHandlers = require_once "../src/commons/errors/errorHandlers.php";
+$app_config = array_merge($settings, $errorsHandlers);
 
-$errors = require '../src/commons/errors/errors.php';
-$configuration = new \Slim\Container(['settings' => ['displayErrorDetails' => true]]);
-$app_config = array_merge($errors);
-$app = new \Slim\App([
-    'settings' => [
-        'displayErrorDetails' => true,
-        'debug' => true,
-        'whoops.editor' => 'sublime',
-    ]]);
+$container = new \Slim\Container($app_config);
+$app = new \Slim\App($container);
 
-$app->get('/test[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Player\control\PlayerController($this))->test($rq, $rs, $args);
-});
+DatabaseConnection::startEloquent(($app->getContainer())->settings['dbconf']);
+
+$app->get('/series[/]', SeriesController::class.':getSeries')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/series/{id}[/]', SeriesController::class.':getSeriesWithId')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/series/{id}/pictures[/]', SeriesController::class.':getPicturesOfOneSeries')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/games/{id}[/]', GameController::class.':getGameWithId')
+    ->add(JWT::class.':checkJWT')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->post('/games[/]', GameController::class.':createGame')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(new Validation(Validator::createGameValidator()))
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->put('/games/{id}[/]', GameController::class.':updateGame')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(new Validation(Validator::updateGameValidator()))
+    ->add(JWT::class.':checkJWT')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/docs[/]', DocsController::class.':renderDocsHtmlFile')
+    ->add(CORS::class.':addCORSHeaders');
+
+$app->get('/', DocsController::class.':redirectTowardsDocs')
+    ->add(CORS::class.':addCORSHeaders');
 
 $app->run();

@@ -6,20 +6,42 @@ use \Respect\Validation\Validator as v;
 
 class Validator
 {
-    public static function validators()
+    public static function validatorsUsers()
     {
         return
             [
-                'nom' => v::StringType()->alpha(),
-                'mail' => v::email(),
-                'livraison' => [
-                    'date' => v::date('d-m-Y')->min('now'),
-                    'heure' => v::date('H:i'),
-                ],
-                "client_id" => v::optional(v::intVal()),
-                "items" => v::arrayVal()->each(v::arrayVal()
-                    ->key('uri', v::stringType())
-                    ->key('q', v::intVal()))
+                'firstname' => v::StringType()->notEmpty()->alpha(),
+                'lastname' => v::StringType()->notEmpty()->alpha(),
+                'email' => v::email()->notEmpty(),
+                'phone' => v::phone()->notEmpty(),
+                'street_number' => v::intType()->notEmpty(),
+                'street' => v::StringType()->notEmpty()->alpha(),
+                'city' => v::stringType()->notEmpty()->alpha(),
+                'zip_code' => v::intType()->notEmpty(),
+            ];
+    }
+
+    public static function validatorsSeries()
+    {
+        return
+            [
+                'city' => v::StringType()->notEmpty()->alpha(),
+                'distance' => v::intType()->notEmpty(),
+                'latitude' => v::StringType()->notEmpty()->alpha(),
+                'longitude' => v::StringType()->notEmpty()->alpha(),
+                'zoom' => v::intType()->notEmpty(),
+                'nb_pictures' => v::intVal()->notEmpty(),
+            ];
+    }
+
+    public static function validatorsPicture()
+    {
+        return
+            [
+                'description' => v::StringType()->notEmpty()->alpha(),
+                'latitude' => v::notEmpty(),
+                'longitude' => v::notEmpty(),
+                'link' => v::url()->notEmpty(),
             ];
     }
 }
