@@ -4,7 +4,6 @@ require '../src/vendor/autoload.php';
 use GeoQuizz\Player\commons\database\DatabaseConnection;
 use GeoQuizz\Player\commons\middlewares\CORS;
 use GeoQuizz\Player\commons\middlewares\JWT;
-use DavidePastore\Slim\Validation\Validation;
 use GeoQuizz\Player\commons\middlewares\Validator;
 use GeoQuizz\Player\control\DocsController;
 use GeoQuizz\Player\control\SeriesController;

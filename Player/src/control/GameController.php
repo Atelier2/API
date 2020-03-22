@@ -2,6 +2,7 @@
 namespace GeoQuizz\Player\control;
 
 use GeoQuizz\Player\commons\writers\JSON;
+use GeoQuizz\Player\commons\writers\URL;
 use GeoQuizz\Player\model\Game;
 use GeoQuizz\Player\model\Series;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -18,7 +19,7 @@ class GameController {
     }
 
     /**
-     * @api {get} /games/leaderboard?page=:page&size=:size Liste
+     * @api {get} /games/leaderboard?page=:page&size=:size Leaderboard
      * @apiGroup Games
      *
      * @apiDescription Récupère toutes les Games classées par le score.
@@ -65,11 +66,7 @@ class GameController {
      *     }
      */
     public function getLeaderboard(Request $request, Response $response, $args) {
-        $scheme = $request->getUri()->getScheme();
-        $host = $request->getUri()->getHost();
-        $port = $request->getUri()->getPort();
-        $path = $request->getUri()->getPath();
-        $leaderboardURL = "$scheme://$host:$port$path";
+        $leaderboardURL = URL::getRequestEndpoint($request);
 
         $total = Game::query()->count();
         $page = $request->getQueryParam('page', 1);
@@ -122,6 +119,11 @@ class GameController {
      *     HTTP/1.1 200 OK
      *     {
      *       "type": "resource",
+     *       "links": {
+     *         "leaderboard": {
+     *           "href": "http://api.player.local:19180/games/leaderboard/"
+     *         }
+     *       },
      *       "game": {
      *         "id": "5a005636-4514-45cc-a6d5-496847b0adbf",
      *         "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA",
@@ -133,13 +135,21 @@ class GameController {
      *     }
      *
      * @apiError GameNotFound Le UUID de la Game n'a pas été trouvé.
+     * @apiError InvalidToken Le Token de la Game est invalide, elle n'est donc pas accessible.
      *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
+     * @apiErrorExample GameNotFound-Response:
+     *     HTTP/1.1 404 NOT FOUND
      *     {
      *       "type": "error",
      *       "error": 404,
      *       "message": "Game with ID 5a005626-4514-45cc-a5d5-496847bdadbf not found."
+     *     }
+     * @apiErrorExample InvalidToken-Response:
+     *     HTTP/1.1 401 UNAUTHORIZED
+     *     {
+     *       "type": "error",
+     *       "error": 401,
+     *       "message": "Token expired."
      *     }
      */
     public function getGameWithId(Request $request, Response $response, $args) {
@@ -148,6 +158,9 @@ class GameController {
 
             return JSON::successResponse($response, 200, [
                 "type" => "resource",
+                "links" => [
+                    "leaderboard" => ["href" => substr(URL::getRequestEndpoint($request), 0, -(strlen($args['id']) + 1))."/leaderboard/"]
+                ],
                 "game" => $game
             ]);
         } catch (ModelNotFoundException $exception) {
@@ -186,8 +199,8 @@ class GameController {
      *
      * @apiError SeriesNotFound Le UUID de la Series n'a pas été trouvé.
      *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
+     * @apiErrorExample SeriesNotFound-Response:
+     *     HTTP/1.1 404 NOT FOUND
      *     {
      *       "type": "error",
      *       "error": 404,
@@ -270,13 +283,21 @@ class GameController {
      *     }
      *
      * @apiError GameNotFound Le UUID de la Game n'a pas été trouvé.
+     * @apiError InvalidToken Le Token de la Game est invalide, elle n'est donc pas accessible.
      *
-     * @apiErrorExample Error-Response:
-     *     HTTP/1.1 404 Not Found
+     * @apiErrorExample GameNotFound-Response:
+     *     HTTP/1.1 404 NOT FOUND
      *     {
      *       "type": "error",
      *       "error": 404,
      *       "message": "Game with ID 5a005636-4514-45cc-a6d5-496847b0adbf not found."
+     *     }
+     * @apiErrorExample InvalidToken-Response:
+     *     HTTP/1.1 401 UNAUTHORIZED
+     *     {
+     *       "type": "error",
+     *       "error": 401,
+     *       "message": "Token expired."
      *     }
      */
     public function updateGame(Request $request, Response $response, $args) {

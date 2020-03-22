@@ -42,7 +42,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"game\": {\n    \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n    \"score\": 0,\n    \"pseudo\": \"Albert Einstein\",\n    \"id_status\": 0,\n    \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"leaderboard\": {\n      \"href\": \"http://api.player.local:19180/games/leaderboard/\"\n    }\n  },\n  \"game\": {\n    \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n    \"score\": 0,\n    \"pseudo\": \"Albert Einstein\",\n    \"id_status\": 0,\n    \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -55,13 +55,24 @@ define({ "api": [
             "optional": false,
             "field": "GameNotFound",
             "description": "<p>Le UUID de la Game n'a pas été trouvé.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidToken",
+            "description": "<p>Le Token de la Game est invalide, elle n'est donc pas accessible.</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Game with ID 5a005626-4514-45cc-a5d5-496847bdadbf not found.\"\n}",
+          "title": "GameNotFound-Response:",
+          "content": "HTTP/1.1 404 NOT FOUND\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Game with ID 5a005626-4514-45cc-a5d5-496847bdadbf not found.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "InvalidToken-Response:",
+          "content": "HTTP/1.1 401 UNAUTHORIZED\n{\n  \"type\": \"error\",\n  \"error\": 401,\n  \"message\": \"Token expired.\"\n}",
           "type": "json"
         }
       ]
@@ -74,7 +85,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/games/leaderboard?page=:page&size=:size",
-    "title": "Liste",
+    "title": "Leaderboard",
     "group": "Games",
     "description": "<p>Récupère toutes les Games classées par le score.</p>",
     "parameter": {
@@ -166,8 +177,8 @@ define({ "api": [
       },
       "examples": [
         {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 8d0eca6-756a-433b-9dde-e7ad64f562cc not found.\"\n}",
+          "title": "SeriesNotFound-Response:",
+          "content": "HTTP/1.1 404 NOT FOUND\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 8d0eca6-756a-433b-9dde-e7ad64f562cc not found.\"\n}",
           "type": "json"
         }
       ]
@@ -259,13 +270,24 @@ define({ "api": [
             "optional": false,
             "field": "GameNotFound",
             "description": "<p>Le UUID de la Game n'a pas été trouvé.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InvalidToken",
+            "description": "<p>Le Token de la Game est invalide, elle n'est donc pas accessible.</p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Game with ID 5a005636-4514-45cc-a6d5-496847b0adbf not found.\"\n}",
+          "title": "GameNotFound-Response:",
+          "content": "HTTP/1.1 404 NOT FOUND\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Game with ID 5a005636-4514-45cc-a6d5-496847b0adbf not found.\"\n}",
+          "type": "json"
+        },
+        {
+          "title": "InvalidToken-Response:",
+          "content": "HTTP/1.1 401 UNAUTHORIZED\n{\n  \"type\": \"error\",\n  \"error\": 401,\n  \"message\": \"Token expired.\"\n}",
           "type": "json"
         }
       ]
@@ -285,7 +307,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": \"38\",\n      \"longitude\": \"53\",\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": \"52\",\n      \"longitude\": \"65\",\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"one_series\": {\n      \"href\": \"http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    }\n  },\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": \"38\",\n      \"longitude\": \"53\",\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": \"52\",\n      \"longitude\": \"65\",\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -318,7 +340,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"series\": {\n    \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": \"38\",\n    \"longitude\": \"53\",\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"pictures\": {\n      \"href\": \"http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/\"\n    },\n    \"all_series\": {\n      \"href\": \"http://api.player.local:19180/series/\"\n    }\n  },\n  \"series\": {\n    \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": \"38\",\n    \"longitude\": \"53\",\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -337,7 +359,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 18d0eca6-756a-484b-9dde-e7ab64f562cc not found.\"\n}",
+          "content": "HTTP/1.1 404 NOT FOUND\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 18d0eca6-756a-484b-9dde-e7ab64f562cc not found.\"\n}",
           "type": "json"
         }
       ]
@@ -370,7 +392,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"pictures\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"description\": \"photo 1\",\n      \"latitude\": \"25\",\n      \"longitude\": \"35\",\n      \"link\": \"http://www.example.fr/photo1.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d02ca6-746a-4e3b-9dfe-e7h664f562cc\",\n      \"description\": \"photo 2\",\n      \"latitude\": \"24\",\n      \"longitude\": \"35\",\n      \"link\": \"http://www.example.fr/photo2.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"series\": {\n      \"href\": \"http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    },\n    \"all_series\": {\n      \"href\": \"http://api.player.local:19180/series/\"\n    }\n  },\n  \"pictures\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"description\": \"photo 1\",\n      \"latitude\": \"25\",\n      \"longitude\": \"35\",\n      \"link\": \"http://www.example.fr/photo1.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d02ca6-746a-4e3b-9dfe-e7h664f562cc\",\n      \"description\": \"photo 2\",\n      \"latitude\": \"24\",\n      \"longitude\": \"35\",\n      \"link\": \"http://www.example.fr/photo2.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -389,7 +411,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 18d0eca6-756a-484b-9dde-e7ab64f562cc not found.\"\n}",
+          "content": "HTTP/1.1 404 NOT FOUND\n{\n  \"type\": \"error\",\n  \"error\": 404,\n  \"message\": \"Series with ID 18d0eca6-756a-484b-9dde-e7ab64f562cc not found.\"\n}",
           "type": "json"
         }
       ]
