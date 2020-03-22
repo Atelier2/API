@@ -82,18 +82,18 @@ $app->get('/series[/]', function ($rq, $rs, $args) {
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
 
 /*Create User*/
-$app->post('/user/signin', function ($rq, $rs, $args) {
-    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignin($rq, $rs, $args);
+$app->post('/user/signup', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignup($rq, $rs, $args);
 })->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsUsers()))
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS');
 
 /*User Login*/
-$app->post('/user/signup', function ($rq, $rs, $args) {
-    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignup($rq, $rs, $args);
+$app->post('/user/signin', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignin($rq, $rs, $args);
 })->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsUsers()))
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-//->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeAuthorization');
-//->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkAuthorization');
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeAuthorization')
+->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkAuthorization');
 
 $app->run();

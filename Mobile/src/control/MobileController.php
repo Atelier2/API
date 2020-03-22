@@ -192,22 +192,23 @@ class MobileController
         }
     }
 
-    public function userSignin(Request $req, Response $resp, array $args)
+    public function userSignup(Request $req, Response $resp, array $args)
     {
         if (!$req->getAttribute('errors')) {
             $user = new user();
-            $getParsedBody = $req->getParsedBody();
+            $getParsedBody = $req->getBody();
+            $decode = json_decode($getParsedBody,true);
             $user->id = Uuid::uuid4();
             $user->token = "test";
-            $user->firstname = filter_var($getParsedBody["firstname"], FILTER_SANITIZE_STRING);
-            $user->lastname = filter_var($getParsedBody["lastname"], FILTER_SANITIZE_STRING);
-            $user->email = filter_var($getParsedBody["email"], FILTER_SANITIZE_EMAIL);
-            $user->password = password_hash($getParsedBody["password"], PASSWORD_DEFAULT);
-            $user->phone = filter_var($getParsedBody["phone"], FILTER_SANITIZE_NUMBER_INT);
-            $user->street_number = filter_var($getParsedBody["street_number"], FILTER_SANITIZE_NUMBER_INT);
-            $user->street = filter_var($getParsedBody["street"], FILTER_SANITIZE_STRING);
-            $user->city = filter_var($getParsedBody["city"], FILTER_SANITIZE_STRING);
-            $user->zip_code = filter_var($getParsedBody["zip_code"], FILTER_SANITIZE_STRING);
+            $user->firstname = filter_var($decode["firstname"], FILTER_SANITIZE_STRING);
+            $user->lastname = filter_var($decode["lastname"], FILTER_SANITIZE_STRING);
+            $user->email = filter_var($decode["email"], FILTER_SANITIZE_EMAIL);
+            $user->password = password_hash($decode["password"], PASSWORD_DEFAULT);
+            $user->phone = filter_var($decode["phone"], FILTER_SANITIZE_NUMBER_INT);
+            $user->street_number = filter_var($decode["street_number"], FILTER_SANITIZE_NUMBER_INT);
+            $user->street = filter_var($decode["street"], FILTER_SANITIZE_STRING);
+            $user->city = filter_var($decode["city"], FILTER_SANITIZE_STRING);
+            $user->zip_code = filter_var($decode["zip_code"], FILTER_SANITIZE_STRING);
             $user->created_at = date("Y-m-d H:i:s");
             $user->updated_at = date("Y-m-d H:i:s");
             $user->save();
@@ -217,18 +218,18 @@ class MobileController
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
-            $rs = $resp->withStatus(401)
+            $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode($errors));
             return $rs;
         }
     }
 
-    public function userSignup(Request $req, Response $resp, array $args)
+    public function userSignin(Request $req, Response $resp, array $args)
     {
         $user_email = $req->getAttribute("user_email");
         $user_password = $req->getAttribute("user_password");
-        if ($user = user::where('email', '=', $user_email)->firstOrFail()) {
+        if ($user = user::where('email', '=', $user_email)->first()) {
             if (password_verify($user_password, $user->password)) {
                 $token = JWT::encode(
                     ['iss' => 'http://api.mobile.local',
@@ -245,13 +246,13 @@ class MobileController
                 ]));
                 return $rs;
             } else {
-                $rs = $resp->withStatus(401)
+                $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
                 $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'email ou mot de passe incorrect']));
                 return $rs;
             }
         } else {
-            $rs = $resp->withStatus(401)
+            $rs = $resp->withStatus(404)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'aucun compte ne correspond à cette adresse email']));
             return $rs;

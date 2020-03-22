@@ -28,7 +28,8 @@ class Middleware
         } else {
             $rs = $rs->withStatus(401)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'no data in Basic Authorization']));
+            $rs->getBody()->write(json_encode([
+                'type' => 'error', 'Error_code' => 401, 'message :' => 'no data in Basic Authorization']));
             return $rs;
         }
     }
@@ -39,10 +40,10 @@ class Middleware
         $getHeader_value = substr($getHeader, 6);
         $getHeader_value_decode = base64_decode($getHeader_value);
         $dote_position = strpos($getHeader_value_decode, ':');
-        $user_name = substr($getHeader_value_decode, 0, $dote_position);
-        $user_passwd = substr($getHeader_value_decode, $dote_position + 1);
-        $rq = $rq->withAttribute("user_email", $user_email);
-        $rq = $rq->withAttribute("user_password", $user_password);
+        $user_email = substr($getHeader_value_decode, 0, $dote_position);
+        $user_password = substr($getHeader_value_decode, $dote_position + 1);
+        $rq = $rq->withAttribute('user_email', $user_email);
+        $rq = $rq->withAttribute('user_password', $user_password);
         return $next($rq, $rs);
     }
 
