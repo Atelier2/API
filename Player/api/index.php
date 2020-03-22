@@ -4,7 +4,6 @@ require '../src/vendor/autoload.php';
 use GeoQuizz\Player\commons\database\DatabaseConnection;
 use GeoQuizz\Player\commons\middlewares\CORS;
 use GeoQuizz\Player\commons\middlewares\JWT;
-use DavidePastore\Slim\Validation\Validation;
 use GeoQuizz\Player\commons\middlewares\Validator;
 use GeoQuizz\Player\control\DocsController;
 use GeoQuizz\Player\control\SeriesController;
@@ -28,18 +27,23 @@ $app->get('/series/{id}[/]', SeriesController::class.':getSeriesWithId')
 $app->get('/series/{id}/pictures[/]', SeriesController::class.':getPicturesOfOneSeries')
     ->add(CORS::class.':addCORSHeaders');
 
+$app->get('/games/leaderboard[/]', GameController::class.':getLeaderboard')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(Validator::getLeaderboardValidator())
+    ->add(CORS::class.':addCORSHeaders');
+
 $app->get('/games/{id}[/]', GameController::class.':getGameWithId')
     ->add(JWT::class.':checkJWT')
     ->add(CORS::class.':addCORSHeaders');
 
 $app->post('/games[/]', GameController::class.':createGame')
     ->add(Validator::class.':dataFormatErrorHandler')
-    ->add(new Validation(Validator::createGameValidator()))
+    ->add(Validator::createGameValidator())
     ->add(CORS::class.':addCORSHeaders');
 
 $app->put('/games/{id}[/]', GameController::class.':updateGame')
     ->add(Validator::class.':dataFormatErrorHandler')
-    ->add(new Validation(Validator::updateGameValidator()))
+    ->add(Validator::updateGameValidator())
     ->add(JWT::class.':checkJWT')
     ->add(CORS::class.':addCORSHeaders');
 
