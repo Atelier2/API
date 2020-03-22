@@ -22,7 +22,7 @@ class Middleware
 
     public function checkAuthorization(Request $rq, Response $rs, callable $next)
     {
-        if (!empty($getHeader = $rq->getHeader("Authorization")[0]) and strpos($getHeader, "Basic") !== false) {
+        if (!empty($getHeader = $rq->getHeader("Authorization")) and strpos($getHeader, "Basic") !== false) {
             $rq = $rq->withAttribute("getHeader", $getHeader);
             return $next($rq, $rs);
         } else {
@@ -41,8 +41,8 @@ class Middleware
         $dote_position = strpos($getHeader_value_decode, ':');
         $user_name = substr($getHeader_value_decode, 0, $dote_position);
         $user_passwd = substr($getHeader_value_decode, $dote_position + 1);
-        $rq = $rq->withAttribute("user_name", $user_name);
-        $rq = $rq->withAttribute("user_passwd", $user_passwd);
+        $rq = $rq->withAttribute("user_email", $user_email);
+        $rq = $rq->withAttribute("user_password", $user_password);
         return $next($rq, $rs);
     }
 

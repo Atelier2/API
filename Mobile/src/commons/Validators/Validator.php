@@ -35,7 +35,7 @@ class Validator
         return
             [
                 'firstname' => v::StringType()->alpha(),
-                'lastname' => v::StrinType()->notEmpty(),
+                'lastname' => v::StringType()->notEmpty(),
                 'email' => v::email(),
                 'phone' => v::phone(),
                 'street_number' => v::intType()->notEmpty(),
