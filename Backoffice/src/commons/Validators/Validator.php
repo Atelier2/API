@@ -44,4 +44,13 @@ class Validator
                 'link' => v::url()->notEmpty(),
             ];
     }
+
+    public static function validatorSeriesPictures()
+    {
+        return
+            [
+                "pictures" => v::arrayVal()->each(v::arrayVal()
+                    ->key('id', v::stringType()->notEmpty()))
+            ];
+    }
 }
