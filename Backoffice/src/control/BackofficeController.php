@@ -32,7 +32,7 @@ class BackofficeController
      *        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuYmFja29mZmljZS5sb2NhbCIsImF1ZCI6Imh0dHA6XC9cL2FwaS5iYWNrb2ZmaWNlLmxvY2FsIiwiaWF0IjoxNTg0ODc0NjY4LCJleHAiOjE1ODQ4NzgyNjgsInVpZCI6ImRlYWFjMGE5LTE5ZmEtNDU2OS05YzNjLTZkNDk4N2EyZDJhMCIsImx2bCI6MX0.UzEOK9IdobzxZboV9JNa6nYHXWNRv7dpANYYq1GFJMfxqzMTyk3N-f60k1FGNyk1GwU5PLwGcHSSHNIRM3VZwA"
      *     }
      */
-    public function userSignup(Request $req, Response $resp, array $args)
+    public function userSignin(Request $req, Response $resp, array $args)
     {
         $user_email = $req->getAttribute("user_email");
         $user_password = $req->getAttribute("user_password");
@@ -99,7 +99,7 @@ class BackofficeController
      *       "votre compte utilisateur a bien été crée"
      *     }.
      */
-    public function userSignin(Request $req, Response $resp, array $args)
+    public function userSignup(Request $req, Response $resp, array $args)
     {
         if (!$req->getAttribute('errors')) {
             $user = new user();
