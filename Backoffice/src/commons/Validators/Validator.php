@@ -27,8 +27,8 @@ class Validator
             [
                 'city' => v::StringType()->notEmpty()->alpha(),
                 'distance' => v::intType()->notEmpty(),
-                'latitude' => v::StringType()->notEmpty()->alpha(),
-                'longitude' => v::StringType()->notEmpty()->alpha(),
+                'latitude' => v::StringType()->notEmpty(),
+                'longitude' => v::StringType()->notEmpty(),
                 'zoom' => v::intType()->notEmpty(),
                 'nb_pictures' => v::intVal()->notEmpty(),
             ];
@@ -38,7 +38,7 @@ class Validator
     {
         return
             [
-                'description' => v::StringType()->notEmpty()->alpha(),
+                'description' => v::StringType()->notEmpty(),
                 'latitude' => v::notEmpty(),
                 'longitude' => v::notEmpty(),
                 'link' => v::url()->notEmpty(),
