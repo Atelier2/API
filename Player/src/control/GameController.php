@@ -77,7 +77,6 @@ class GameController {
             ->where('id_status', '=', 2);
 
         if ($size > $total) {
-            $size = $total;
             $page = 1;
         } else if (($page * $size) > $total) {
             $page = intdiv($total, $size) + 1;
@@ -91,10 +90,10 @@ class GameController {
         return JSON::successResponse($response, 200, [
             "type" => "resources",
             "links" => [
-                "next" => ["href" => "$leaderboardURL?page=".($page+1)."&size=$size"],
-                "prev" => ["href" => "$leaderboardURL?page=".($page-1)."&size=$size"],
-                "last" => ["href" => "$leaderboardURL?page=".(intdiv($total, $size) + 1)."&size=$size"],
-                "first" => ["href" => "$leaderboardURL?page=1&size=$size"]
+                "next" => ["href" => "leaderboard?page=".($page+1)."&size=$size"],
+                "prev" => ["href" => "leaderboard?page=".($page > 1 ? $page-1 : $page)."&size=$size"],
+                "last" => ["href" => "leaderboard?page=".(intdiv($total, $size) + 1)."&size=$size"],
+                "first" => ["href" => "leaderboard?page=1&size=$size"]
             ],
             "games" => $games
         ]);
