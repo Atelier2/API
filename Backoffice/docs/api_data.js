@@ -195,6 +195,97 @@ define({ "api": [
     "groupTitle": "Picture"
   },
   {
+    "type": "get",
+    "url": "http://api.backoffice.local:19280/series/{id}",
+    "title": "Récupérer une serie existantes.",
+    "name": "getSerie",
+    "group": "Serie",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "BearerToken",
+            "description": "<p>JWT de l'utilisateur connecte.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>identifiant de la série recherchée.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n\"type\": \"collection\",\n\"serie\": {\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./src/control/BackofficeController.php",
+    "groupTitle": "Serie"
+  },
+  {
+    "type": "get",
+    "url": "http://api.backoffice.local:19280/series",
+    "title": "Récupérer toutes les series existantes.",
+    "name": "getSeries",
+    "group": "Serie",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl http://api.backoffice.local:19280/series",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "BearerToken",
+            "description": "<p>JWT de l'utilisateur connecte.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n\"type\": \"collection\",\n\"series\": [\n{\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n},\n{\n\"id\": \"52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 18:56:38\",\n\"updated_at\": \"2020-03-21 18:56:38\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./src/control/BackofficeController.php",
+    "groupTitle": "Serie"
+  },
+  {
     "type": "post",
     "url": "http://api.backoffice.local:19280/series",
     "title": "Creer une Serie.",
@@ -458,13 +549,56 @@ define({ "api": [
   {
     "type": "post",
     "url": "http://api.backoffice.local:19280/user/signin",
-    "title": "Creer un membre.",
+    "title": "se connecter avec un membre.",
     "name": "userSignin",
+    "group": "User",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "BasicAuth",
+            "description": "<p>user_email  &amp; user_password.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "JWT",
+            "description": "<p>token de session.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuYmFja29mZmljZS5sb2NhbCIsImF1ZCI6Imh0dHA6XC9cL2FwaS5iYWNrb2ZmaWNlLmxvY2FsIiwiaWF0IjoxNTg0ODc0NjY4LCJleHAiOjE1ODQ4NzgyNjgsInVpZCI6ImRlYWFjMGE5LTE5ZmEtNDU2OS05YzNjLTZkNDk4N2EyZDJhMCIsImx2bCI6MX0.UzEOK9IdobzxZboV9JNa6nYHXWNRv7dpANYYq1GFJMfxqzMTyk3N-f60k1FGNyk1GwU5PLwGcHSSHNIRM3VZwA\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./src/control/BackofficeController.php",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "http://api.backoffice.local:19280/user/signup",
+    "title": "Creer un membre.",
+    "name": "userSignup",
     "group": "User",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/user/signin",
+        "content": "curl -X POST http://api.backoffice.local:19280/user/signup",
         "type": "curl"
       }
     ],
@@ -549,49 +683,6 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"votre compte utilisateur a bien été crée\"\n}.",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
-    "groupTitle": "User"
-  },
-  {
-    "type": "post",
-    "url": "http://api.backoffice.local:19280/user/signup",
-    "title": "se connecter avec un membre.",
-    "name": "userSignup",
-    "group": "User",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "BasicAuth",
-            "description": "<p>user_email  &amp; user_password.</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "JWT",
-            "description": "<p>token de session.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n   \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkuYmFja29mZmljZS5sb2NhbCIsImF1ZCI6Imh0dHA6XC9cL2FwaS5iYWNrb2ZmaWNlLmxvY2FsIiwiaWF0IjoxNTg0ODc0NjY4LCJleHAiOjE1ODQ4NzgyNjgsInVpZCI6ImRlYWFjMGE5LTE5ZmEtNDU2OS05YzNjLTZkNDk4N2EyZDJhMCIsImx2bCI6MX0.UzEOK9IdobzxZboV9JNa6nYHXWNRv7dpANYYq1GFJMfxqzMTyk3N-f60k1FGNyk1GwU5PLwGcHSSHNIRM3VZwA\"\n}",
           "type": "json"
         }
       ]

@@ -30,7 +30,7 @@ class Validator
                 'latitude' => v::StringType()->notEmpty(),
                 'longitude' => v::StringType()->notEmpty(),
                 'zoom' => v::intType()->notEmpty(),
-                'nb_pictures' => v::intVal()->notEmpty(),
+                'nb_pictures' => v::numeric(),
             ];
     }
 

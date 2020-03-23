@@ -21,8 +21,8 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signup se connecter avec un membre.
-     * @apiName userSignup
+     * @api {post} http://api.backoffice.local:19280/user/signin se connecter avec un membre.
+     * @apiName userSignin
      * @apiGroup User
      * @apiHeader {String} BasicAuth  user_email  & user_password.
      * @apiSuccess {String} JWT token de session.
@@ -59,7 +59,7 @@ class BackofficeController
                 return $rs;
             }
         } else {
-            $rs = $resp->withStatus(404)
+            $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode('aucun compte ne correspond à cette adresse email'));
             return $rs;
@@ -67,11 +67,11 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signin Creer un membre.
-     * @apiName userSignin
+     * @api {post} http://api.backoffice.local:19280/user/signup Creer un membre.
+     * @apiName userSignup
      * @apiGroup User
      * @apiExample {curl} Example usage:
-     *     curl -X POST http://api.backoffice.local:19280/user/signin
+     *     curl -X POST http://api.backoffice.local:19280/user/signup
      * @apiParam {String} firstname Le prenom du membre.
      * @apiParam {String} lastname Le nom du membre.
      * @apiParam {String} email l'addresse email du membre.
@@ -289,7 +289,7 @@ class BackofficeController
                 $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
                 return $rs;
             } else {
-                $rs = $resp->withStatus(404)
+                $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
                 $rs->getBody()->write(json_encode("cette serie n'existe pas"));
                 return $rs;
@@ -410,6 +410,93 @@ class BackofficeController
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+    /**
+     * @api {get} http://api.backoffice.local:19280/series Récupérer toutes les series existantes.
+     * @apiName getSeries
+     * @apiGroup Serie
+     * @apiExample {curl} Example usage:
+     *  curl http://api.backoffice.local:19280/series
+     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiSuccessExample Success-Response:
+     * {
+     * "type": "collection",
+     * "series": [
+     * {
+     * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 13:22:55",
+     * "updated_at": "2020-03-21 13:22:55",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * },
+     * {
+     * "id": "52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 18:56:38",
+     * "updated_at": "2020-03-21 18:56:38",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * }
+     * ]
+     * }
+     */
+    public function getSeries(Request $req, Response $resp, array $args)
+    {
+        $series = series::all();
+        $rs = $resp->withStatus(200)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $rs->getBody()->write(json_encode(["type" => "collection", "series" => $series]));
+        return $rs;
+    }
+
+    /**
+     * @api {get} http://api.backoffice.local:19280/series/{id} Récupérer une serie existantes.
+     * @apiName getSerie
+     * @apiGroup Serie
+     * @apiExample {curl} Example usage:
+     *  curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2
+     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiParam {String}  id identifiant de la série recherchée.
+     * @apiSuccessExample Success-Response:
+     * {
+     * "type": "collection",
+     * "serie": {
+     * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 13:22:55",
+     * "updated_at": "2020-03-21 13:22:55",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * }
+     * }
+     */
+    public function getSerie(Request $req, Response $resp, array $args)
+    {
+        if ($series = series::find($args["id"])) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "serie" => $series]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode('Aucune série ne correspond à cette id'));
             return $rs;
         }
     }
