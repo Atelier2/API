@@ -139,11 +139,11 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X POST http://api.backoffice.local:19280/series
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {String} City La ville de la serie.
-     * @apiParam {Number} Distance De la serie.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {Number} Zoom l'indice de zoom.
+     * @apiParam {String} city La ville de la serie.
+     * @apiParam {Number} distance De la serie.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
@@ -199,10 +199,10 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X POST http://api.backoffice.local:19280/picture
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {String} Description description de la photo.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {URL} Link liens de la photo vers Clodinary.
+     * @apiParam {String} description description de la photo.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers Clodinary.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Tour Eiffel",
@@ -310,12 +310,12 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X PUT http://api.backoffice.local:19280/series/5451d518-6863-409b-af77-0c29119b931c
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {Number} Id id de la série a modifié.
-     * @apiParam {String} City La ville de la serie.
-     * @apiParam {Number} Distance De la serie.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {Number} Zoom l'indice de zoom.
+     * @apiParam {Number} id id de la série a modifié.
+     * @apiParam {String} city La ville de la serie.
+     * @apiParam {Number} distance De la serie.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
@@ -366,11 +366,11 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X PUT http://api.backoffice.local:19280/picture/3a192e17-e853-41af-80b7-c457e860e166
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {Number} Id id de la photo a modifié.
-     * @apiParam {String} Description description de la photo.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {URL} Link liens de la photo vers Clodinary.
+     * @apiParam {Number} id id de la photo a modifié.
+     * @apiParam {String} description description de la photo.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers Clodinary.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Arc de Triomphe",

@@ -24,6 +24,21 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
+$app->get('/docs[/]', function (Request $request, Response $response, $args) {
+    return $response->write(file_get_contents('docs/index.html'));
+});
+
+$app->get('/', function (Request $request, Response $response, $args) {
+    $scheme = $request->getUri()->getScheme();
+    $host = $request->getUri()->getHost();
+    $port = $request->getUri()->getPort();
+    $path = $request->getUri()->getPath();
+    $docURL = "$scheme://$host:$port$path" . "docs/";
+
+    $response = $response->withHeader("Location", $docURL);
+    return $response;
+});
+
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 })->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS');

@@ -1,33 +1,5 @@
 define({ "api": [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./docs/main.js",
-    "group": "/var/www/html/Atelier2/API/Backoffice/docs/main.js",
-    "groupTitle": "/var/www/html/Atelier2/API/Backoffice/docs/main.js",
-    "name": ""
-  },
-  {
     "type": "post",
     "url": "http://api.backoffice.local:19280/picture",
     "title": "Envoyer une photo.",
@@ -60,28 +32,28 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Description",
+            "field": "description",
             "description": "<p>description de la photo.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Latitude",
+            "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Longitude",
+            "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "URL",
             "optional": false,
-            "field": "Link",
+            "field": "link",
             "description": "<p>liens de la photo vers Clodinary.</p>"
           }
         ]
@@ -104,7 +76,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Picture"
   },
   {
@@ -140,35 +112,35 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Id",
+            "field": "id",
             "description": "<p>id de la photo a modifié.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Description",
+            "field": "description",
             "description": "<p>description de la photo.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Latitude",
+            "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Longitude",
+            "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "URL",
             "optional": false,
-            "field": "Link",
+            "field": "link",
             "description": "<p>liens de la photo vers Clodinary.</p>"
           }
         ]
@@ -191,7 +163,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Picture"
   },
   {
@@ -243,7 +215,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Serie"
   },
   {
@@ -282,7 +254,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Serie"
   },
   {
@@ -318,35 +290,35 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "City",
+            "field": "city",
             "description": "<p>La ville de la serie.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Distance",
+            "field": "distance",
             "description": "<p>De la serie.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Latitude",
+            "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Longitude",
+            "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Zoom",
+            "field": "zoom",
             "description": "<p>l'indice de zoom.</p>"
           },
           {
@@ -376,7 +348,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Serie"
   },
   {
@@ -442,7 +414,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Series"
   },
   {
@@ -478,42 +450,42 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Id",
+            "field": "id",
             "description": "<p>id de la série a modifié.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "City",
+            "field": "city",
             "description": "<p>La ville de la serie.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Distance",
+            "field": "distance",
             "description": "<p>De la serie.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Latitude",
+            "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "Longitude",
+            "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "Zoom",
+            "field": "zoom",
             "description": "<p>l'indice de zoom.</p>"
           },
           {
@@ -543,7 +515,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "Serie"
   },
   {
@@ -586,7 +558,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "User"
   },
   {
@@ -688,7 +660,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/BackofficeController.php",
+    "filename": "../src/control/BackofficeController.php",
     "groupTitle": "User"
   }
 ] });
