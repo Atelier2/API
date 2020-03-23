@@ -68,13 +68,18 @@ class GameController {
     public function getLeaderboard(Request $request, Response $response, $args) {
         $leaderboardURL = URL::getRequestEndpoint($request);
 
-        $total = Game::query()->count();
         $page = $request->getQueryParam('page', 1);
         $size = $request->getQueryParam('size', 10);
 
         $games = Game::query()
             ->where('score', '!=', 0)
             ->where('id_status', '=', 2);
+
+        $total = Game::query()
+            ->where('score', '!=', 0)
+            ->where('id_status', '=', 2)
+            ->count();
+
 
         if ($size > $total) {
             $page = 1;
@@ -90,9 +95,9 @@ class GameController {
         return JSON::successResponse($response, 200, [
             "type" => "resources",
             "links" => [
-                "next" => ["href" => "leaderboard?page=".($page+1)."&size=$size"],
+                "next" => ["href" => "leaderboard?page=".(ceil($total / $size) > $page ? $page + 1 : ceil($total / $size))."&size=$size"],
                 "prev" => ["href" => "leaderboard?page=".($page > 1 ? $page-1 : $page)."&size=$size"],
-                "last" => ["href" => "leaderboard?page=".(intdiv($total, $size) + 1)."&size=$size"],
+                "last" => ["href" => "leaderboard?page=".(ceil($total / $size))."&size=$size"],
                 "first" => ["href" => "leaderboard?page=1&size=$size"]
             ],
             "games" => $games
