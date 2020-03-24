@@ -24,6 +24,21 @@ $app = new \Slim\App([
         'whoops.editor' => 'sublime',
     ]]);
 
+$app->get('/docs[/]', function (Request $request, Response $response, $args) {
+    return $response->write(file_get_contents('docs/index.html'));
+});
+
+$app->get('/', function (Request $request, Response $response, $args) {
+    $scheme = $request->getUri()->getScheme();
+    $host = $request->getUri()->getHost();
+    $port = $request->getUri()->getPort();
+    $path = $request->getUri()->getPath();
+    $docURL = "$scheme://$host:$port$path" . "docs/";
+
+    $response = $response->withHeader("Location", $docURL);
+    return $response;
+});
+
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 })->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS');
@@ -35,6 +50,14 @@ $app->post('/user/signup', function ($rq, $rs, $args) {
 $app->post('/user/signin', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->userSignin($rq, $rs, $args);
 })->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeAuthorization')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkAuthorization');
+
+$app->get('/series', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->getSeries($rq, $rs, $args);
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin');
+
+$app->get('/series/{id}', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->getSerie($rq, $rs, $args);
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin');
 
 $app->post('/series', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->insertSerie($rq, $rs, $args);

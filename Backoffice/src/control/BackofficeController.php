@@ -21,8 +21,8 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signup se connecter avec un membre.
-     * @apiName userSignup
+     * @api {post} http://api.backoffice.local:19280/user/signin se connecter avec un membre.
+     * @apiName userSignin
      * @apiGroup User
      * @apiHeader {String} BasicAuth  user_email  & user_password.
      * @apiSuccess {String} JWT token de session.
@@ -59,7 +59,7 @@ class BackofficeController
                 return $rs;
             }
         } else {
-            $rs = $resp->withStatus(404)
+            $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode('aucun compte ne correspond à cette adresse email'));
             return $rs;
@@ -67,11 +67,11 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signin Creer un membre.
-     * @apiName userSignin
+     * @api {post} http://api.backoffice.local:19280/user/signup Creer un membre.
+     * @apiName userSignup
      * @apiGroup User
      * @apiExample {curl} Example usage:
-     *     curl -X POST http://api.backoffice.local:19280/user/signin
+     *     curl -X POST http://api.backoffice.local:19280/user/signup
      * @apiParam {String} firstname Le prenom du membre.
      * @apiParam {String} lastname Le nom du membre.
      * @apiParam {String} email l'addresse email du membre.
@@ -139,11 +139,11 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X POST http://api.backoffice.local:19280/series
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {String} City La ville de la serie.
-     * @apiParam {Number} Distance De la serie.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {Number} Zoom l'indice de zoom.
+     * @apiParam {String} city La ville de la serie.
+     * @apiParam {Number} distance De la serie.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
@@ -199,10 +199,10 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X POST http://api.backoffice.local:19280/picture
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {String} Description description de la photo.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {URL} Link liens de la photo vers Clodinary.
+     * @apiParam {String} description description de la photo.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers Clodinary.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Tour Eiffel",
@@ -289,7 +289,7 @@ class BackofficeController
                 $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
                 return $rs;
             } else {
-                $rs = $resp->withStatus(404)
+                $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
                 $rs->getBody()->write(json_encode("cette serie n'existe pas"));
                 return $rs;
@@ -310,12 +310,12 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X PUT http://api.backoffice.local:19280/series/5451d518-6863-409b-af77-0c29119b931c
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {Number} Id id de la série a modifié.
-     * @apiParam {String} City La ville de la serie.
-     * @apiParam {Number} Distance De la serie.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {Number} Zoom l'indice de zoom.
+     * @apiParam {Number} id id de la série a modifié.
+     * @apiParam {String} city La ville de la serie.
+     * @apiParam {Number} distance De la serie.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
@@ -366,11 +366,11 @@ class BackofficeController
      * @apiExample {curl} Example usage:
      *  curl -X PUT http://api.backoffice.local:19280/picture/3a192e17-e853-41af-80b7-c457e860e166
      * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
-     * @apiParam {Number} Id id de la photo a modifié.
-     * @apiParam {String} Description description de la photo.
-     * @apiParam {String} Latitude coordonnées gps latitude.
-     * @apiParam {String} Longitude coordonnées gps longitude.
-     * @apiParam {URL} Link liens de la photo vers Clodinary.
+     * @apiParam {Number} id id de la photo a modifié.
+     * @apiParam {String} description description de la photo.
+     * @apiParam {String} latitude coordonnées gps latitude.
+     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers Clodinary.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Arc de Triomphe",
@@ -410,6 +410,93 @@ class BackofficeController
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode($errors));
+            return $rs;
+        }
+    }
+
+    /**
+     * @api {get} http://api.backoffice.local:19280/series Récupérer toutes les series existantes.
+     * @apiName getSeries
+     * @apiGroup Serie
+     * @apiExample {curl} Example usage:
+     *  curl http://api.backoffice.local:19280/series
+     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiSuccessExample Success-Response:
+     * {
+     * "type": "collection",
+     * "series": [
+     * {
+     * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 13:22:55",
+     * "updated_at": "2020-03-21 13:22:55",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * },
+     * {
+     * "id": "52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 18:56:38",
+     * "updated_at": "2020-03-21 18:56:38",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * }
+     * ]
+     * }
+     */
+    public function getSeries(Request $req, Response $resp, array $args)
+    {
+        $series = series::all();
+        $rs = $resp->withStatus(200)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $rs->getBody()->write(json_encode(["type" => "collection", "series" => $series]));
+        return $rs;
+    }
+
+    /**
+     * @api {get} http://api.backoffice.local:19280/series/{id} Récupérer une serie existantes.
+     * @apiName getSerie
+     * @apiGroup Serie
+     * @apiExample {curl} Example usage:
+     *  curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2
+     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiParam {String}  id identifiant de la série recherchée.
+     * @apiSuccessExample Success-Response:
+     * {
+     * "type": "collection",
+     * "serie": {
+     * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
+     * "city": "test",
+     * "distance": 2121,
+     * "latitude": "test",
+     * "longitude": "test",
+     * "zoom": 7,
+     * "nb_pictures": 4,
+     * "created_at": "2020-03-21 13:22:55",
+     * "updated_at": "2020-03-21 13:22:55",
+     * "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c"
+     * }
+     * }
+     */
+    public function getSerie(Request $req, Response $resp, array $args)
+    {
+        if ($series = series::find($args["id"])) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "serie" => $series]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode('Aucune série ne correspond à cette id'));
             return $rs;
         }
     }

@@ -1,61 +1,5 @@
 define({ "api": [
   {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./doc/main.js",
-    "group": "/var/www/html/Atelier2/API/Mobile/doc/main.js",
-    "groupTitle": "/var/www/html/Atelier2/API/Mobile/doc/main.js",
-    "name": ""
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "optional": false,
-            "field": "varname1",
-            "description": "<p>No type.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "varname2",
-            "description": "<p>With type.</p>"
-          }
-        ]
-      }
-    },
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "./src/control/main.js",
-    "group": "/var/www/html/Atelier2/API/Mobile/src/control/main.js",
-    "groupTitle": "/var/www/html/Atelier2/API/Mobile/src/control/main.js",
-    "name": ""
-  },
-  {
     "type": "post",
     "url": "http://api.mobile.local:19380/picture",
     "title": "Ajouter une photo",
@@ -132,7 +76,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Pictures"
   },
   {
@@ -210,7 +154,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Pictures"
   },
   {
@@ -275,7 +219,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Pictures"
   },
   {
@@ -369,7 +313,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Series"
   },
   {
@@ -447,7 +391,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Series"
   },
   {
@@ -519,7 +463,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "Series"
   },
   {
@@ -562,7 +506,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "User"
   },
   {
@@ -664,7 +608,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./src/control/MobileController.php",
+    "filename": "src/control/MobileController.php",
     "groupTitle": "User"
   }
 ] });
