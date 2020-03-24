@@ -36,32 +36,33 @@ class BackofficeController
     {
         $user_email = $req->getAttribute("user_email");
         $user_password = $req->getAttribute("user_password");
-        if ($user = user::where('email', '=', $user_email)->first()) {
-            if (password_verify($user_password, $user->password)) {
-                $token = JWT::encode(
-                    ['iss' => 'http://api.backoffice.local',
-                        'aud' => 'http://api.backoffice.local',
-                        'iat' => time(),
-                        'exp' => time() + 3600,
-                        'uid' => $user->id,
-                        'lvl' => 1],
-                    "secret", 'HS512');
-                $rs = $resp->withStatus(200)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode([
-                    "token" => $token
-                ]));
-                return $rs;
-            } else {
-                $rs = $resp->withStatus(400)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode('email ou mot de passe incorrect'));
-                return $rs;
-            }
+        if ($user = user::where('email', '=', $user_email)->first() and password_verify($user_password, $user->password)) {
+            $token = JWT::encode(
+                ['iss' => 'http://api.backoffice.local',
+                    'aud' => 'http://api.backoffice.local',
+                    'iat' => time(),
+                    'exp' => time() + 86400,
+                    'uid' => $user->id,
+                    'lvl' => 1],
+                "secret", 'HS512');
+            $expiration = array();
+            $expiration["date"] = date('Y-m-d', time() + 86400);
+            $expiration["time"] = date('H:i:s', time() + 86400);
+            $user_data = array();
+            $user_data["email"] = $user->email;
+            $user_data["id"] = $user->id;
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode([
+                "token" => $token,
+                "expiration" => $expiration,
+                "user" => $user_data
+            ]));
+            return $rs;
         } else {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode('aucun compte ne correspond à cette adresse email'));
+            $rs->getBody()->write(json_encode('email ou mot de passe incorrect'));
             return $rs;
         }
     }
@@ -121,7 +122,7 @@ class BackofficeController
             $user->save();
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("votre compte utilisateur a bien été crée"));
+            $rs->getBody()->write(json_encode(["email" => $user->email, "password" => $json["password"], "uuid" => $user->id]));
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
@@ -270,35 +271,43 @@ class BackofficeController
      */
     public function seriesPictures(Request $req, Response $resp, array $args)
     {
-        if (!$req->getAttribute('errors')) {
-            if ($series = series::find($args["id"])) {
-                $getBody = $req->getBody();
-                $json = json_decode($getBody, true);
-                foreach ($json["pictures"] as $picture) {
-                    if (picture::find($picture["id"])) {
-                        $series->series_pictures()->attach($picture["id"]);
-                    } else {
-                        $rs = $resp->withStatus(400)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode($picture["id"] . " " . "cette photo ne peut pas etre associées à cette série car son id n'existe pas"));
-                        return $rs;
+        if ($series = series::find($args["id"])) {
+            $token = $req->getAttribute("token");
+            if ($series->id_user == $token->uid) {
+                if (!$req->getAttribute('errors')) {
+                    $getBody = $req->getBody();
+                    $json = json_decode($getBody, true);
+                    foreach ($json["pictures"] as $picture) {
+                        if (picture::find($picture["id"])) {
+                            $series->series_pictures()->attach($picture["id"]);
+                        } else {
+                            $rs = $resp->withStatus(400)
+                                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                            $rs->getBody()->write(json_encode($picture["id"] . " " . "cette photo ne peut pas etre associées à cette série car son id n'existe pas"));
+                            return $rs;
+                        }
                     }
+                    $rs = $resp->withStatus(200)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
+                    return $rs;
+                } else {
+                    $errors = $req->getAttribute('errors');
+                    $rs = $resp->withStatus(400)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode($errors));
+                    return $rs;
                 }
-                $rs = $resp->withStatus(200)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
-                return $rs;
             } else {
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("cette serie n'existe pas"));
+                $rs->getBody()->write(json_encode("cette serie n'est pas pour toi"));
                 return $rs;
             }
         } else {
-            $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($errors));
+            $rs->getBody()->write(json_encode("cette serie n'existe pas"));
             return $rs;
         }
     }
@@ -334,27 +343,35 @@ class BackofficeController
      */
     public function updateSerie(Request $req, Response $resp, array $args)
     {
-        if (!$req->getAttribute('errors')) {
-            $series = series::findOrFail($args["id"]);
-            $getBody = $req->getBody();
-            $json = json_decode($getBody, true);
-            $series->city = filter_var($json["city"], FILTER_SANITIZE_STRING);
-            $series->distance = filter_var($json["distance"], FILTER_SANITIZE_NUMBER_INT);
-            $series->latitude = filter_var($json["latitude"], FILTER_SANITIZE_STRING);
-            $series->longitude = filter_var($json["longitude"], FILTER_SANITIZE_STRING);
-            $series->zoom = filter_var($json["zoom"], FILTER_SANITIZE_NUMBER_INT);
-            $series->nb_pictures = filter_var($json["nb_pictures"], FILTER_SANITIZE_NUMBER_INT);
-            $series->updated_at = date("Y-m-d H:i:s");
-            $series->save();
-            $rs = $resp->withStatus(200)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("la serie a bien été mise a jour"));
-            return $rs;
+        $series = series::findOrFail($args["id"]);
+        $token = $req->getAttribute("token");
+        if ($series->id_user == $token->uid) {
+            if (!$req->getAttribute('errors')) {
+                $getBody = $req->getBody();
+                $json = json_decode($getBody, true);
+                $series->city = filter_var($json["city"], FILTER_SANITIZE_STRING);
+                $series->distance = filter_var($json["distance"], FILTER_SANITIZE_NUMBER_INT);
+                $series->latitude = filter_var($json["latitude"], FILTER_SANITIZE_STRING);
+                $series->longitude = filter_var($json["longitude"], FILTER_SANITIZE_STRING);
+                $series->zoom = filter_var($json["zoom"], FILTER_SANITIZE_NUMBER_INT);
+                $series->nb_pictures = filter_var($json["nb_pictures"], FILTER_SANITIZE_NUMBER_INT);
+                $series->updated_at = date("Y-m-d H:i:s");
+                $series->save();
+                $rs = $resp->withStatus(200)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode("la serie a bien été mise a jour"));
+                return $rs;
+            } else {
+                $errors = $req->getAttribute('errors');
+                $rs = $resp->withStatus(400)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode($errors));
+                return $rs;
+            }
         } else {
-            $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($errors));
+            $rs->getBody()->write(json_encode("vous ne pouvez pas changer cette serie"));
             return $rs;
         }
     }
@@ -386,8 +403,10 @@ class BackofficeController
      */
     public function updatePicture(Request $req, Response $resp, array $args)
     {
-        if (!$req->getAttribute('errors')) {
-            if ($pictures = picture::find($args["id"])) {
+        $token = $req->getAttribute("token");
+        $pictures = picture::find($args["id"]);
+        if ($pictures->id_user == $token->uid) {
+            if (!$req->getAttribute('errors')) {
                 $getBody = $req->getBody();
                 $json = json_decode($getBody, true);
                 $pictures->description = filter_var($json["description"], FILTER_SANITIZE_STRING);
@@ -400,16 +419,16 @@ class BackofficeController
                 $rs->getBody()->write(json_encode("la photo a bien été mise a jour"));
                 return $rs;
             } else {
+                $errors = $req->getAttribute('errors');
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("Pas de photos correspondantes à cette id"));
+                $rs->getBody()->write(json_encode($errors));
                 return $rs;
             }
         } else {
-            $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($errors));
+            $rs->getBody()->write(json_encode("vous ne pouvez pas modifier cette photo"));
             return $rs;
         }
     }
@@ -454,11 +473,21 @@ class BackofficeController
      */
     public function getSeries(Request $req, Response $resp, array $args)
     {
-        $series = series::all();
-        $rs = $resp->withStatus(200)
-            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-        $rs->getBody()->write(json_encode(["type" => "collection", "series" => $series]));
-        return $rs;
+        $token = $req->getAttribute("token");
+        $user = user::find($token->uid);
+        $series = $user->getSeries()->get();
+        $count_series = count($series);
+        if ($count_series > 0) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "pictures" => $series]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("vous n'avez aucunne serie"));
+            return $rs;
+        }
     }
 
     /**
@@ -488,17 +517,58 @@ class BackofficeController
      */
     public function getSerie(Request $req, Response $resp, array $args)
     {
-        if ($series = series::find($args["id"])) {
+        $id = $req->getAttribute("id");
+        $token = $req->getAttribute("token");
+        $user = user::find($token->uid);
+        $serie = series::find($id);
+        if ($user->id == $serie->id_user) {
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(["type" => "collection", "serie" => $series]));
+            $rs->getBody()->write(json_encode(["type" => "collection", "serie" => $serie]));
             return $rs;
         } else {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode('Aucune série ne correspond à cette id'));
+            $rs->getBody()->write(json_encode("vous ne pouvez pas voir cette serie"));
             return $rs;
         }
     }
 
+    public function getPictures(Request $req, Response $resp, array $args)
+    {
+        $token = $req->getAttribute("token");
+        $user = user::find($token->uid);
+        $pictures = $user->getPictures()->get();
+        $count_pictures = count($pictures);
+        if ($count_pictures > 0) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "pictures" => $pictures]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("vous n'avez aucunne photo"));
+            return $rs;
+        }
+    }
+
+    public function getPicture(Request $req, Response $resp, array $args)
+    {
+        $id = $req->getAttribute("id");
+        $token = $req->getAttribute("token");
+        $user = user::find($token->uid);
+        $picture = picture::find($id);
+        if ($user->id == $picture->id_user) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "picture" => $picture]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("vous ne pouvez pas voir cette photo"));
+            return $rs;
+        }
+    }
 }

@@ -10,5 +10,4 @@ class Picture extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     public $incrementing = false;
-
 }
