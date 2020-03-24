@@ -92,7 +92,6 @@ $app->post('/user/signin', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignin($rq, $rs, $args);
 })->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsUsers()))
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeAuthorization')
 ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkAuthorization');
 

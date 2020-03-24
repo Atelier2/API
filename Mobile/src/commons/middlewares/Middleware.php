@@ -22,7 +22,7 @@ class Middleware
 
     public function checkAuthorization(Request $rq, Response $rs, callable $next)
     {
-        if (!empty($getHeader = $rq->getHeader("Authorization")) and strpos($getHeader, "Basic") !== false) {
+        if (!empty($getHeader = $rq->getHeader("Authorization")[0]) and strpos($getHeader, "Basic") !== false) {
             $rq = $rq->withAttribute("getHeader", $getHeader);
             return $next($rq, $rs);
         } else {
@@ -109,7 +109,7 @@ class Middleware
         try {
             $h = $rq->getHeader('Authorization')[0];
             $tokenstring = sscanf($h, "Bearer %s")[0];
-            $token = JWT::decode($tokenstring, "secret", ['HS512']);
+            $token = JWT::decode($tokenstring, "secret", ["HS512"]);
             $rq = $rq->withAttribute("token", $token);
             return $next($rq, $rs);
         } catch (ExpiredException $e) {

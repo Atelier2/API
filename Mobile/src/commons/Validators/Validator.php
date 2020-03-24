@@ -37,11 +37,12 @@ class Validator
                 'firstname' => v::StringType()->alpha(),
                 'lastname' => v::StringType()->notEmpty(),
                 'email' => v::email(),
+                'password' => v::alnum()->notEmpty(),
                 'phone' => v::phone(),
                 'street_number' => v::intType()->notEmpty(),
                 'street' => v::StringType()->notEmpty(),
                 'city' => v::StringType()->notEmpty(),
-                'zip_code' => v::StringType()->notEmpty()
+                'zip_code' => v::alnum()->notEmpty()
             ];
     }
 
