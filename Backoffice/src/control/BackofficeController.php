@@ -3,6 +3,7 @@
 namespace GeoQuizz\Backoffice\control;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use GeoQuizz\Backoffice\model\User as user;
@@ -106,8 +107,10 @@ class BackofficeController
             $user = new user();
             $getBody = $req->getBody();
             $json = json_decode($getBody, true);
+            $token = random_bytes(32);
+            $token = bin2hex($token);
             $user->id = Uuid::uuid4();
-            $user->token = "test";
+            $user->token = $token;
             $user->firstname = filter_var($json["firstname"], FILTER_SANITIZE_STRING);
             $user->lastname = filter_var($json["lastname"], FILTER_SANITIZE_STRING);
             $user->email = filter_var($json["email"], FILTER_SANITIZE_EMAIL);
@@ -182,7 +185,7 @@ class BackofficeController
             $series->save();
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("une nouvelle serie a bien été crée"));
+            $rs->getBody()->write(json_encode(["series_uuid" => $series->id, "users_uuid" => $series->id_user, "date" => $series->created_at, "message" => "une nouvelle serie a bien ete cree"]));
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
@@ -231,9 +234,11 @@ class BackofficeController
             $picture->link = filter_var($json["link"], FILTER_VALIDATE_URL);
             $picture->id_user = $token->uid;
             $picture->save();
+            $PictureArray = array();
+            $PictureArray["id"] = $picture->id;
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("la photo a bien été enregistré"));
+            $rs->getBody()->write(json_encode(["pictures" => $PictureArray]));
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
@@ -271,43 +276,47 @@ class BackofficeController
      */
     public function seriesPictures(Request $req, Response $resp, array $args)
     {
-        if ($series = series::find($args["id"])) {
-            $token = $req->getAttribute("token");
-            if ($series->id_user == $token->uid) {
-                if (!$req->getAttribute('errors')) {
-                    $getBody = $req->getBody();
-                    $json = json_decode($getBody, true);
-                    foreach ($json["pictures"] as $picture) {
-                        if (picture::find($picture["id"])) {
-                            $series->series_pictures()->attach($picture["id"]);
-                        } else {
-                            $rs = $resp->withStatus(400)
-                                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                            $rs->getBody()->write(json_encode($picture["id"] . " " . "cette photo ne peut pas etre associées à cette série car son id n'existe pas"));
-                            return $rs;
+        try {
+            if ($series = series::find($args["id"])) {
+                $token = $req->getAttribute("token");
+                if ($series->id_user == $token->uid) {
+                    if (!$req->getAttribute('errors')) {
+                        $getBody = $req->getBody();
+                        $json = json_decode($getBody, true);
+                        foreach ($json["pictures"] as $picture) {
+                            if ($pictures = picture::find($picture["id"]) and $pictures->id_user == $token->uid) {
+                                $series->series_pictures()->attach($picture["id"]);
+                            } else {
+                                echo "cette photo ne peut pas etre associe.";
+                            }
                         }
+                        $rs = $resp->withStatus(200)
+                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                        $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
+                        return $rs;
+                    } else {
+                        $errors = $req->getAttribute('errors');
+                        $rs = $resp->withStatus(400)
+                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                        $rs->getBody()->write(json_encode($errors));
+                        return $rs;
                     }
-                    $rs = $resp->withStatus(200)
-                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                    $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
-                    return $rs;
                 } else {
-                    $errors = $req->getAttribute('errors');
                     $rs = $resp->withStatus(400)
                         ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                    $rs->getBody()->write(json_encode($errors));
+                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer  cette serie"));
                     return $rs;
                 }
             } else {
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("cette serie n'est pas pour toi"));
+                $rs->getBody()->write(json_encode("cette serie n'existe pas"));
                 return $rs;
             }
-        } else {
+        } catch (QueryException $queryException) {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("cette serie n'existe pas"));
+            $rs->getBody()->write(json_encode("ces photos sont déjà associée à cette série"));
             return $rs;
         }
     }
@@ -359,7 +368,7 @@ class BackofficeController
                 $series->save();
                 $rs = $resp->withStatus(200)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("la serie a bien été mise a jour"));
+                $rs->getBody()->write(json_encode(["series_uuid" => $series->id, "users_uuid" => $series->id_user, "date" => $series->created_at, "message" => "la serie a bien ete modifie"]));
                 return $rs;
             } else {
                 $errors = $req->getAttribute('errors');
@@ -404,31 +413,37 @@ class BackofficeController
     public function updatePicture(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
-        $pictures = picture::find($args["id"]);
-        if ($pictures->id_user == $token->uid) {
-            if (!$req->getAttribute('errors')) {
-                $getBody = $req->getBody();
-                $json = json_decode($getBody, true);
-                $pictures->description = filter_var($json["description"], FILTER_SANITIZE_STRING);
-                $pictures->latitude = filter_var($json["latitude"], FILTER_SANITIZE_STRING);
-                $pictures->longitude = filter_var($json["longitude"], FILTER_SANITIZE_STRING);
-                $pictures->link = filter_var($json["link"], FILTER_VALIDATE_URL);
-                $pictures->save();
-                $rs = $resp->withStatus(200)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("la photo a bien été mise a jour"));
-                return $rs;
+        if ($pictures = picture::find($args["id"])) {
+            if ($pictures->id_user == $token->uid) {
+                if (!$req->getAttribute('errors')) {
+                    $getBody = $req->getBody();
+                    $json = json_decode($getBody, true);
+                    $pictures->description = filter_var($json["description"], FILTER_SANITIZE_STRING);
+                    $pictures->latitude = filter_var($json["latitude"], FILTER_SANITIZE_STRING);
+                    $pictures->longitude = filter_var($json["longitude"], FILTER_SANITIZE_STRING);
+                    $pictures->link = filter_var($json["link"], FILTER_VALIDATE_URL);
+                    $pictures->save();
+                    $rs = $resp->withStatus(200)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode(["pictures_uuid" => $pictures->id, "users_uuid" => $pictures->id_user, "date" => $pictures->updated_at, "message" => "la photo a bien ete modifie"]));
+                    return $rs;
+                } else {
+                    $errors = $req->getAttribute('errors');
+                    $rs = $resp->withStatus(400)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode($errors));
+                    return $rs;
+                }
             } else {
-                $errors = $req->getAttribute('errors');
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode($errors));
+                $rs->getBody()->write(json_encode("vous ne pouvez pas modifier cette photo"));
                 return $rs;
             }
         } else {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("vous ne pouvez pas modifier cette photo"));
+            $rs->getBody()->write(json_encode("cette photo n'existe pas"));
             return $rs;
         }
     }
@@ -480,7 +495,7 @@ class BackofficeController
         if ($count_series > 0) {
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(["type" => "collection", "pictures" => $series]));
+            $rs->getBody()->write(json_encode(["type" => "collection", "series" => $series]));
             return $rs;
         } else {
             $rs = $resp->withStatus(400)
@@ -524,7 +539,7 @@ class BackofficeController
         if ($user->id == $serie->id_user) {
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(["type" => "collection", "serie" => $serie]));
+            $rs->getBody()->write(json_encode(["type" => "collection", "series" => $serie]));
             return $rs;
         } else {
             $rs = $resp->withStatus(400)
@@ -558,16 +573,63 @@ class BackofficeController
         $id = $req->getAttribute("id");
         $token = $req->getAttribute("token");
         $user = user::find($token->uid);
-        $picture = picture::find($id);
-        if ($user->id == $picture->id_user) {
-            $rs = $resp->withStatus(200)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(["type" => "collection", "picture" => $picture]));
-            return $rs;
+        if ($pictures = picture::find($id)) {
+            if ($user->id == $pictures->id_user) {
+                $rs = $resp->withStatus(200)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode(["type" => "collection", "pictures" => $pictures]));
+                return $rs;
+            } else {
+                $rs = $resp->withStatus(400)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode("vous ne pouvez pas voir cette photo"));
+                return $rs;
+            }
         } else {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("vous ne pouvez pas voir cette photo"));
+            $rs->getBody()->write(json_encode("cette photo n'existe pas"));
+            return $rs;
+        }
+    }
+
+    public function seriePicture(Request $req, Response $resp, array $args)
+    {
+        try {
+            if ($series = series::find($args["id"])) {
+                $token = $req->getAttribute("token");
+                if ($series->id_user == $token->uid) {
+                    $getBody = $req->getBody();
+                    $json = json_decode($getBody, true);
+                    $pictures = picture::find($json["id"]);
+                    if ($pictures->id_user == $token->uid) {
+                        $series->series_pictures()->attach($pictures["id"]);
+                        $rs = $resp->withStatus(200)
+                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                        $rs->getBody()->write(json_encode(["series uuid" => $series->id, "pictures uuid" => $pictures->id, "user uuid" => $token->uid, "message" => 'cette photo a bien ete associe a cette serie']));
+                        return $rs;
+                    } else {
+                        $rs = $resp->withStatus(400)
+                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                        $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette photo"));
+                        return $rs;
+                    }
+                } else {
+                    $rs = $resp->withStatus(400)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette serie"));
+                    return $rs;
+                }
+            } else {
+                $rs = $resp->withStatus(400)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode("cette serie n'existe pas."));
+                return $rs;
+            }
+        } catch (QueryException $queryException) {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("cette photo est déjà associée à cette série"));
             return $rs;
         }
     }

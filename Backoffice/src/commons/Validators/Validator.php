@@ -14,6 +14,7 @@ class Validator
                 'lastname' => v::StringType()->notEmpty()->alpha(),
                 'email' => v::email()->notEmpty(),
                 'phone' => v::phone()->notEmpty(),
+                'password' => v::notEmpty(),
                 'street_number' => v::intType()->notEmpty(),
                 'street' => v::StringType()->notEmpty()->alpha(),
                 'city' => v::stringType()->notEmpty()->alpha(),
@@ -53,4 +54,5 @@ class Validator
                     ->key('id', v::stringType()->notEmpty()))
             ];
     }
+    
 }
