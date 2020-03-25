@@ -233,9 +233,11 @@ class BackofficeController
             $picture->link = filter_var($json["link"], FILTER_VALIDATE_URL);
             $picture->id_user = $token->uid;
             $picture->save();
+            $PictureArray = array();
+            $PictureArray["id"] = $picture->id;
             $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode(["pictures_uuid" => $picture->id, "users_uuid" => $picture->id_user, "date" => $picture->created_at, "message" => "une nouvelle photo a bien ete ajoute"]));
+            $rs->getBody()->write(json_encode(["pictures" => $PictureArray]));
             return $rs;
         } else {
             $errors = $req->getAttribute('errors');
