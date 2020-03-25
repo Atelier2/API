@@ -45,31 +45,23 @@ class MobileController
      *     }
      * 
      */
-    public function addPicture(Request $req, Response $resp, array $args)
-    {
-        if (!$req->getAttribute('errors')) {
-            $token = $req->getAttribute("token");
-            $picture = new picture();
-            $body = $req->getParsedBody();
-            $parsed = json_decode($body, true);
-            $picture->id = Uuid::uuid4();
-            $picture->description = filter_var($parsed["description"], FILTER_SANITIZE_STRING);
-            $picture->latitude = filter_var($parsed["latitude"], FILTER_SANITIZE_STRING);
-            $picture->longitude = filter_var($parsed["longitude"], FILTER_SANITIZE_STRING);
-            $picture->link = filter_var($parsed["link"], FILTER_VALIDATE_URL);
-            $picture->id_user = $token->uid;
-            $picture->save();
-            $rs = $resp->withStatus(200)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($picture , "Picture saved"));
-            return $rs;
-        } else {
-            $errors = $req->getAttribute('errors');
-            $rs = $resp->withStatus(400)
-                ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($errors));
-            return $rs;
-        }
+    public function addPicture(Request $req, Response $resp, array $args){
+        $token = $req->getAttribute("token");
+        $userToken = user::find($token->uid);
+        $picture = new picture();
+        $getBody = $req->getBody();
+        $json = json_decode($getBody, true);
+        $picture->id = Uuid::uuid4();
+        $picture->description = filter_var($json["description"], FILTER_SANITIZE_STRING);
+        $picture->latitude = filter_var($json["latitude"], FILTER_SANITIZE_STRING);
+        $picture->longitude = filter_var($json["longitude"], FILTER_SANITIZE_STRING);
+        $picture->link = filter_var($json["link"], FILTER_VALIDATE_URL);
+        $picture->id_user = $userToken;
+        $picture->save();
+        $rs = $resp->withStatus(200)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $rs->getBody()->write(json_encode("la photo a bien été enregistré"));
+        return $rs;
     }
 
 
@@ -140,10 +132,10 @@ class MobileController
         try {
             $id = $args['id'];
             $token = $req->getAttribute('token');
-
+            $user = user::find($token);
             $picture = picture::find($id);
-
-            $rs = $resp->withStatus(200)
+            if($user->id === $picture->id_user){
+                $rs = $resp->withStatus(200)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
 
             $rs->getBody()->write(json_encode([
@@ -152,6 +144,8 @@ class MobileController
                 ]));
 
             return $rs;
+            }
+            
         } catch (\Exception $e) {
             $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(401)
@@ -325,15 +319,15 @@ class MobileController
      * @apiParam {Alphanumeric} zip_code Le code postal.
      * @apiParamExample {json} Request-Example:
      *     {
-	    *"firstname" : "secondtname",
-	    *"lastname" : "thirdname",
-	    *"email" : "thirdname@secondtname.com",
-	    *"password" : "lol",
-	    *"phone" : 687777775,
-	    *"street_number": 131,
-	    *"street" : "rue des Frangipanes",
-	    *"city" : "Noumea",
-	    *"zip_code" : 98800
+	 *   "firstname" : "secondtname",
+	 *   "lastname" : "thirdname",
+	 *   "email" : "thirdname@secondtname.com",
+	 *   "password" : "lol",
+	 *   "phone" : 687777775,
+	 *   "street_number": 131,
+	 *   "street" : "rue des Frangipanes",
+	 *   "city" : "Noumea",
+	 *   "zip_code" : 98800
      *      }
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -342,11 +336,10 @@ class MobileController
      *     }.
      */
     public function userSignup(Request $req, Response $resp, array $args)
-    {
+    {   
+        $getParsedBody = $req->getParsedBody();
         if (!$req->getAttribute('errors')) {
             $user = new user();
-            $getParsedBody = $req->getBody();
-            $decode = json_decode($getParsedBody,true);
             $user->id = Uuid::uuid4();
             $user->token = JWT::encode([
                 "iss" => "api_mobile",
@@ -354,15 +347,15 @@ class MobileController
                 "aud" => "mobile",
                 "iat" => time(),"exp" => time() + (3 * 60 * 60),
             ], $this->c->settings['secret'], "HS512");
-            $user->firstname = filter_var($decode["firstname"], FILTER_SANITIZE_STRING);
-            $user->lastname = filter_var($decode["lastname"], FILTER_SANITIZE_STRING);
-            $user->email = filter_var($decode["email"], FILTER_SANITIZE_EMAIL);
-            $user->password = password_hash($decode["password"], PASSWORD_DEFAULT);
-            $user->phone = filter_var($decode["phone"], FILTER_SANITIZE_NUMBER_INT);
-            $user->street_number = filter_var($decode["street_number"], FILTER_SANITIZE_NUMBER_INT);
-            $user->street = filter_var($decode["street"], FILTER_SANITIZE_STRING);
-            $user->city = filter_var($decode["city"], FILTER_SANITIZE_STRING);
-            $user->zip_code = filter_var($decode["zip_code"], FILTER_SANITIZE_STRING);
+            $user->firstname = filter_var($getParsedBody["firstname"], FILTER_SANITIZE_STRING);
+            $user->lastname = filter_var($getParsedBody["lastname"], FILTER_SANITIZE_STRING);
+            $user->email = filter_var($getParsedBody["email"], FILTER_SANITIZE_EMAIL);
+            $user->password = password_hash($getParsedBody["password"], PASSWORD_DEFAULT);
+            $user->phone = filter_var($getParsedBody["phone"], FILTER_SANITIZE_NUMBER_INT);
+            $user->street_number = filter_var($getParsedBody["street_number"], FILTER_SANITIZE_NUMBER_INT);
+            $user->street = filter_var($getParsedBody["street"], FILTER_SANITIZE_STRING);
+            $user->city = filter_var($getParsedBody["city"], FILTER_SANITIZE_STRING);
+            $user->zip_code = filter_var($getParsedBody["zip_code"], FILTER_SANITIZE_STRING);
             $user->created_at = date("Y-m-d H:i:s");
             $user->updated_at = date("Y-m-d H:i:s");
             $user->save();
@@ -370,14 +363,14 @@ class MobileController
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode("votre compte utilisateur a bien été crée"));
             return $rs;
-        } else {
+            }else{
             $errors = $req->getAttribute('errors');
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
             $rs->getBody()->write(json_encode($errors));
             return $rs;
-        }
-    }
+            }
+}
 
     /**
      * @api {post} http://api.mobile.local:19380/user/signin Se connecter.
@@ -395,44 +388,44 @@ class MobileController
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
      *     {
-     *        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfbW9iaWxlIiwic3ViIjoic2lnbnVwIiwiYXVkIjoibW9iaWxlIiwiaWF0IjoxNTg0OTgzODQ3LCJleHAiOjE1ODQ5OTQ2NDd9.WytkWsxnokvOSxnL0g70s3ViXWX7BN1SHWZTTjwatltGbciALQY_u-46dOLgn-JRq-tHLxBydLWTifJsnhB7xg"
+     *        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfbW9iaWxlIiwic3ViIjoic2lnbnVwIiwiYXVkIjoibW9iaWxlIiwiaWF0IjoxNTg1MDYzMDI3LCJleHAiOjE1ODUwNzM4Mjd9.5dmat3CIkPsZOKykLRLVpef9Vll4yk3nYeLMFDGHJ9-x6AA9fGs9Dwx-vPuK-nH7dLZbtHXkq6djtA8OrNxA3g"
      *     }
     */
     public function userSignin(Request $req, Response $resp, array $args)
     {
-        $login = $req->getParsedBody();
-        $user = user::where('email', '=', $login['user_email'])->first();
+        $user_email = $req->getAttribute("user_email");
+        $user_password = $req->getAttribute("user_password");
 
-        if(!$user){
-            $rs = $resp->withStatus(400)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode(['email incorrect']));
-                return $rs;
-        }
-        if(!password_verify($login['user_password'], $user->password)){
-            $rs = $resp->withStatus(400)
-                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode(['mot de passe incorrect']));
-                return $rs;
-        }
+        if ($user = user::where('email', '=', $user_email)->first()) {
+            if (password_verify($user_password, $user->password)) {
 
-        $settings = $this->c->get('settings');
+                $token = JWT::encode([
+                    "iss" => "api_mobile",
+                    "sub" => "signup",
+                    "aud" => "mobile",
+                    "iat" => time(),"exp" => time() + (3 * 60 * 60),
+                ], $this->c->settings['secret'], "HS512");
 
-        $token = $user->token;
-            /*
-            JWT::encode(
-            [
-            'email' => $user->email, 
-            'password'=>$user->password
-            ], 
-            $settings['jwt']['secret'],"HS512");
-            */
-        
-            $rs = $resp->withStatus(200)
+                $rs = $resp->withStatus(200)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode([
-                    'token' => $token
+                $rs->getBody()->write(json_encode([
+                    "token" => $token
                 ]));
+
+                return $rs;
+
+            } else {
+                $rs = $resp->withStatus(400)
+                    ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                $rs->getBody()->write(json_encode('email ou mot de passe incorrect'));
+                return $rs;
+            }
+
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode('aucun compte ne correspond à cette adresse email'));
             return $rs;
+        }
     }
 }
