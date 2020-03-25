@@ -16,7 +16,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} /series/ Liste
+     * @api {get} https://api.player.local.19143/series/ Liste
      * @apiGroup Series
      *
      * @apiDescription Récupère toutes les Series.
@@ -27,7 +27,7 @@ class SeriesController {
      *       "type": "resources",
      *       "links": {
      *         "one_series": {
-     *           "href": "http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
+     *           "href": "https://api.player.local.19143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
      *         }
      *       },
      *       "series": [
@@ -75,7 +75,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} /series/:id/ Obtenir
+     * @api {get} https://api.player.local.19143/series/:id/ Obtenir
      * @apiGroup Series
      *
      * @apiDescription Récupère une Series.
@@ -88,10 +88,10 @@ class SeriesController {
      *       "type": "resource",
      *       "links": {
      *         "pictures": {
-     *           "href": "http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/"
+     *           "href": "https://api.player.local.19143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/"
      *         },
      *         "all_series": {
-     *           "href": "http://api.player.local:19180/series/"
+     *           "href": "https://api.player.local.19143/series/"
      *         }
      *       },
      *       "series": {
@@ -136,7 +136,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} /series/:id/pictures/ Photos
+     * @api {get} https://api.player.local.19143/series/:id/pictures/ Photos
      * @apiGroup Series
      *
      * @apiDescription Récupère les photos d'une Series.
@@ -149,10 +149,10 @@ class SeriesController {
      *       "type": "resources",
      *       "links": {
      *         "series": {
-     *           "href": "http://api.player.local:19180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
+     *           "href": "https://api.player.local.19143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
      *         },
      *         "all_series": {
-     *           "href": "http://api.player.local:19180/series/"
+     *           "href": "https://api.player.local.19143/series/"
      *         }
      *       },
      *       "pictures": [

@@ -1,98 +1,67 @@
 <?php
 require '../src/vendor/autoload.php';
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use \lbs\common\bootstrap\Eloquent;
-use \DavidePastore\Slim\Validation\Validation as Validation;
+use GeoQuizz\Mobile\commons\database\DatabaseConnection;
+use GeoQuizz\Mobile\commons\middlewares\BasicAuth;
+use GeoQuizz\Mobile\commons\middlewares\Checker;
+use GeoQuizz\Mobile\commons\middlewares\CORS;
+use GeoQuizz\Mobile\commons\middlewares\JWT;
+use GeoQuizz\Mobile\commons\middlewares\Validator;
+use GeoQuizz\Mobile\control\DocsController;
+use GeoQuizz\Mobile\control\PictureController;
+use GeoQuizz\Mobile\control\UserController;
+use GeoQuizz\Mobile\control\SeriesController;
 
-$config = parse_ini_file("../src/conf/conf.ini");
-$db = new Illuminate\Database\Capsule\Manager();
-$db->addConnection($config);
-$db->setAsGlobal();
-$db->bootEloquent();
+$settings = require_once "../src/conf/settings.php";
+$errorsHandlers = require_once "../src/commons/errors/errorHandlers.php";
+$app_config = array_merge($settings, $errorsHandlers);
 
-$errors = require '../src/commons/errors/errors.php';
-$configuration = new \Slim\Container(['settings' => ['displayErrorDetails' => true]]);
-$app_config = array_merge($errors);
-$app = new \Slim\App([
-    'settings' => [
-        'displayErrorDetails' => true,
-        'debug' => true,
-        'whoops.editor' => 'sublime',
-    ]]);
+$container = new \Slim\Container($app_config);
+$app = new \Slim\App($container);
 
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
-})->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS');
+DatabaseConnection::startEloquent(($app->getContainer())->settings['dbconf']);
 
-/*Ajoute une photo*/
-$app->post('/picture[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->addPicture($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
-    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-    ->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->post('/users/signin[/]', UserController::class.':signIn')
+    ->add(BasicAuth::class.':decodeBasicAuth')
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Récupère toutes les photos*/
-$app->get('/picture[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->getPictures($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->post('/users/signup[/]', UserController::class.':signUp')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(Validator::createUserValidator())
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Récupère une photo voulu*/
-$app->get('/picture/{id}[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->getPictureId($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsPictures()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->get('/users/{id}/series[/]', SeriesController::class.':getSeries')
+    ->add(JWT::class.':checkJWT')
+    ->add(Checker::class.':userExists')
+    ->add(CORS::class.':addCORSHeaders');
 
+$app->post('/users/{id}/series[/]', SeriesController::class.':createSeries')
+    ->add(JWT::class.':checkJWT')
+    ->add(Checker::class.':userExists')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(Validator::createSeriesValidator())
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Ajoute une série*/
-$app->post('/series[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->createSerie($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->post('/users/{id}/pictures[/]', PictureController::class.':addPicture')
+    ->add(JWT::class.':checkJWT')
+    ->add(Checker::class.':userExists')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(Validator::addPictureValidator())
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Récupère une série en particulier*/
-$app->get('/series/{id}[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->getSerieId($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->post('/users/{id_user}/series/{id_series}/pictures[/]', PictureController::class.':addPictureToSeries')
+    ->add(JWT::class.':checkJWT')
+    ->add(Checker::class.':seriesExists')
+    ->add(Checker::class.':userExists')
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Récupère toutes les séries*/
-$app->get('/series[/]', function ($rq, $rs, $args) {
-    return (new GeoQuizz\Mobile\control\MobileController($this))->getSeries($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsSeriesPictures()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkHeaderOrigin')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeJWT')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkJWT');
+$app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })
+    ->add(CORS::class.':addCORSHeaders');
 
-/*Create User*/
-$app->post('/user/signup', function ($rq, $rs, $args) {
-    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignup($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsUsers()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS');
+$app->get('/docs[/]', DocsController::class.':renderDocsHtmlFile')
+    ->add(CORS::class.':addCORSHeaders');
 
-/*User Login*/
-$app->post('/user/signin', function ($rq, $rs, $args) {
-    return (new \GeoQuizz\Mobile\control\MobileController($this))->userSignin($rq, $rs, $args);
-})->add(new \DavidePastore\Slim\Validation\Validation(\GeoQuizz\Mobile\commons\Validators\Validator::validatorsUsers()))
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':headersCORS')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':decodeAuthorization')
-->add(\GeoQuizz\Mobile\commons\middlewares\Middleware::class . ':checkAuthorization');
+$app->get('/', DocsController::class.':redirectTowardsDocs')
+    ->add(CORS::class.':addCORSHeaders');
 
 $app->run();

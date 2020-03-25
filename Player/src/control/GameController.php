@@ -19,7 +19,7 @@ class GameController {
     }
 
     /**
-     * @api {get} /games/leaderboard?page=:page&size=:size Leaderboard
+     * @api {get} https://api.player.local.19143/games/leaderboard?page=:page&size=:size Leaderboard
      * @apiGroup Games
      *
      * @apiDescription Récupère toutes les Games classées par le score.
@@ -33,16 +33,16 @@ class GameController {
      *       "type": "resources",
      *       "links": {
      *         "next": {
-     *           "href": "http://api.player.local:19180/games/leaderboard?page=2&size=2"
+     *           "href": "https://api.player.local.19143/games/leaderboard?page=2&size=2"
      *         },
      *         "prev": {
-     *           "href": "http://api.player.local:19180/games/leaderboard?page=0&size=2"
+     *           "href": "https://api.player.local.19143/games/leaderboard?page=0&size=2"
      *         },
      *         "last": {
-     *           "href": "http://api.player.local:19180/games/leaderboard?page=5&size=2"
+     *           "href": "https://api.player.local.19143/games/leaderboard?page=5&size=2"
      *         },
      *         "first": {
-     *           "href": "http://api.player.local:19180/games/leaderboard?page=1&size=2"
+     *           "href": "https://api.player.local.19143/games/leaderboard?page=1&size=2"
      *         }
      *       },
      *       "games": [
@@ -95,17 +95,17 @@ class GameController {
         return JSON::successResponse($response, 200, [
             "type" => "resources",
             "links" => [
-                "next" => ["href" => "leaderboard?page=".(ceil($total / $size) > $page ? $page + 1 : ceil($total / $size))."&size=$size"],
-                "prev" => ["href" => "leaderboard?page=".($page > 1 ? $page-1 : $page)."&size=$size"],
-                "last" => ["href" => "leaderboard?page=".(ceil($total / $size))."&size=$size"],
-                "first" => ["href" => "leaderboard?page=1&size=$size"]
+                "next" => ["href" => "$leaderboardURL?page=".(ceil($total / $size) > $page ? $page + 1 : ceil($total / $size))."&size=$size"],
+                "prev" => ["href" => "$leaderboardURL?page=".($page > 1 ? $page-1 : $page)."&size=$size"],
+                "last" => ["href" => "$leaderboardURL?page=".(ceil($total / $size))."&size=$size"],
+                "first" => ["href" => "$leaderboardURL?page=1&size=$size"]
             ],
             "games" => $games
         ]);
     }
 
     /**
-     * @api {get} /games/:id/ Obtenir
+     * @api {get} https://api.player.local.19143/games/:id/ Obtenir
      * @apiGroup Games
      *
      * @apiDescription Récupère une Game.
@@ -125,7 +125,7 @@ class GameController {
      *       "type": "resource",
      *       "links": {
      *         "leaderboard": {
-     *           "href": "http://api.player.local:19180/games/leaderboard/"
+     *           "href": "https://api.player.local.19143/games/leaderboard/"
      *         }
      *       },
      *       "game": {
@@ -173,7 +173,7 @@ class GameController {
     }
 
     /**
-     * @api {post} /games/ Créer
+     * @api {post} https://api.player.local.19143/games/ Créer
      * @apiGroup Games
      *
      * @apiDescription Crée une Game.
@@ -221,9 +221,7 @@ class GameController {
                 $game = new Game();
                 $game->id = Uuid::uuid4();
                 $game->token = JWT::encode([
-                    "iss" => "api_player",
-                    "sub" => "game",
-                    "aud" => "player",
+                    "aud" => $game->id,
                     "iat" => time(), // Current timestamp
                     "exp" => time() + (3 * 60 * 60), // Current timestamp + 3 hours
                 ], $this->container->settings['JWT_secret'], "HS512");
@@ -250,7 +248,7 @@ class GameController {
     }
 
     /**
-     * @api {put} /games/:id/ Modifier
+     * @api {put} https://api.player.local.19143/games/:id/ Modifier
      * @apiGroup Games
      *
      * @apiDescription Modifie une Game existante.

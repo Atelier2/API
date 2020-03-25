@@ -1,7 +1,7 @@
 <?php
-namespace GeoQuizz\Player\commons\middlewares;
+namespace GeoQuizz\Mobile\commons\middlewares;
 
-use GeoQuizz\Player\commons\writers\JSON;
+use GeoQuizz\Mobile\commons\writers\JSON;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Firebase\JWT\JWT as FirebaseJWT;
@@ -21,10 +21,12 @@ class JWT {
 
         if (!empty($authHeader) and strpos($authHeader, "Bearer") !== false) {
             try {
-                $tokenstring = sscanf($authHeader, "Bearer %s")[0];
-                $token = FirebaseJWT::decode($tokenstring, $this->container->settings['JWT_secret'], ['HS512']);
+                $tokenString = sscanf($authHeader, "Bearer %s")[0];
+                $token = FirebaseJWT::decode($tokenString, $this->container->settings['JWT_secret'], ['HS512']);
 
-                if ($token->aud === $request->getAttribute('routeInfo')[2]['id']) {
+                $user_id = isset($request->getAttribute('routeInfo')[2]['id']) ? $request->getAttribute('routeInfo')[2]['id'] : $request->getAttribute('routeInfo')[2]['id_user'];
+
+                if ($token->aud === $user_id) {
                     return $next($request, $response);
                 } else {
                     return JSON::errorResponse($response, 401, "This token doesn't belong to you.");

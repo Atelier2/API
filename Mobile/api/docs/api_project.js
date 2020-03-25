@@ -1,13 +1,13 @@
 define({
-  "name": "GeoQuizz - Player API",
+  "name": "GeoQuizz - Mobile API",
   "version": "0.0.0",
-  "description": "API pour la WebApp de jeu en VueJS.",
+  "description": "API pour la l'application Mobile en NativeScript.",
   "apidoc": "0.3.0",
   "sampleUrl": false,
   "defaultVersion": "0.0.0",
   "generator": {
     "name": "apidoc",
-    "time": "2020-03-25T13:19:02.066Z",
+    "time": "2020-03-25T13:18:08.466Z",
     "url": "http://apidocjs.com",
     "version": "0.20.1"
   }

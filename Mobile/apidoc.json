@@ -1,9 +1,9 @@
 {
-  "name": "GeoQuizzApp - Mobile",
+  "name": "GeoQuizz - Mobile API",
   "version": "0.0.0",
-  "description": "API pour l'application mobile",
-  "apidoc" : {
-	"title" : "GeoQuizzApp - Mobile",
-	"url" : "https://github.com/Atelier2/API/tree/master/Mobile"
-	}
+  "description": "API pour la l'application Mobile en NativeScript.",
+  "apidoc": {
+    "title": "GeoQuizz - Mobile API",
+    "url" : "https://github.com/Atelier2/API/tree/master/Mobile"
+  }
 }
