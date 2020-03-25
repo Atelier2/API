@@ -26,7 +26,7 @@ class UserController {
      * @apiParam {String} lastname Le nom de famille du User.
      * @apiParam {String} email L'addresse e-mail du User.
      * @apiParam {String} password Le mot de passe du User.
-     * @apiParam {String} phone Le numéro de téléphone du User.
+     * @apiParam {String} [phone] Le numéro de téléphone du User.
      * @apiParam {Number} street_number Le numéro de la rue du User.
      * @apiParam {String} street Le nom de la rue du User.
      * @apiParam {String} city Le nom de la ville du User.

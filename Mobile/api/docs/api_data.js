@@ -526,7 +526,7 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "String",
-            "optional": false,
+            "optional": true,
             "field": "phone",
             "description": "<p>Le numéro de téléphone du User.</p>"
           },
