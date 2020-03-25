@@ -22,7 +22,7 @@ class Middleware
 
     public function checkAuthorization(Request $rq, Response $rs, callable $next)
     {
-        if (!empty($getHeader = $rq->getHeader("Authorization")[0]) and strpos($getHeader, "Basic") !== false) {
+        if (@!empty($getHeader = $rq->getHeader("Authorization")[0]) and strpos($getHeader, "Basic") !== false) {
             $rq = $rq->withAttribute("getHeader", $getHeader);
             return $next($rq, $rs);
         } else {
@@ -70,7 +70,7 @@ class Middleware
 
     public function checkJWT(Request $rq, Response $rs, callable $next)
     {
-        if (!empty($h = $rq->getHeader("Authorization")[0]) and strpos($h, "Bearer") !== false) {
+        if (@!empty($h = $rq->getHeader("Authorization")[0]) and strpos($h, "Bearer") !== false) {
             return $next($rq, $rs);
         } else {
             $rs = $rs->withStatus(401)
@@ -111,6 +111,9 @@ class Middleware
             $rq = $rq->withAttribute("token", $token);
             return $next($rq, $rs);
         } catch (ExpiredException $e) {
+            $rs = $rs->withStatus(401)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(['type' => 'error', 'Error_code' => 401, 'message :' => 'Votre JWT a expiré']));
             return $rs;
         } catch (SignatureInvalidException $e) {
             return $rs;
@@ -119,5 +122,13 @@ class Middleware
         } catch (\UnexpectedValueException $e) {
             return $rs;
         }
+    }
+
+    public function validJWT(Request $rq, Response $rs, callable $next)
+    {
+        $rs = $rs->withStatus(200)
+            ->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $rs->getBody()->write(json_encode("Token valide"));
+        return $rs;
     }
 }
