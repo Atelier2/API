@@ -289,46 +289,36 @@ class BackofficeController
     public function seriesPictures(Request $req, Response $resp, array $args)
     {
         try {
-            if ($series = series::find($args["id"])) {
-                $token = $req->getAttribute("token");
-                if ($series->id_user == $token->uid) {
-                    if (!$req->getAttribute('errors')) {
-                        $getBody = $req->getBody();
-                        $json = json_decode($getBody, true);
-                        foreach ($json["pictures"] as $picture) {
-                            if ($pictures = picture::find($picture["id"]) and $pictures->id_user == $token->uid) {
-                                $series->series_pictures()->attach($picture["id"]);
-                            } else {
-                                echo "cette photo ne peut pas etre associe.";
-                            }
+            $token = $req->getAttribute("token");
+            if ($series = series::find($args["id"]) and $series->id_user == $token->uid) {
+                if (!$req->getAttribute('errors')) {
+                    $getBody = $req->getBody();
+                    $json = json_decode($getBody, true);
+                    foreach ($json["pictures"] as $picture) {
+                        if ($pictures = picture::find($picture["id"]) and $pictures->id_user == $token->uid) {
+                            $series->series_pictures()->attach($picture["id"]);
+                            echo $picture["id"] . ' ' . "cette photo a bien été associé.";
+                        } else {
+                            echo $picture["id"] . ' ' . "cette photo ne peut pas être associée.";
                         }
-                        $rs = $resp->withStatus(200)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
-                        return $rs;
-                    } else {
-                        $errors = $req->getAttribute('errors');
-                        $rs = $resp->withStatus(400)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode($errors));
-                        return $rs;
                     }
                 } else {
+                    $errors = $req->getAttribute('errors');
                     $rs = $resp->withStatus(400)
                         ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer  cette serie"));
+                    $rs->getBody()->write(json_encode($errors));
                     return $rs;
                 }
             } else {
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("cette serie n'existe pas"));
+                $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette serie"));
                 return $rs;
             }
         } catch (QueryException $queryException) {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("ces photos sont déjà associée à cette série"));
+            $rs->getBody()->write(json_encode("ces photos sont déjà associées cette série"));
             return $rs;
         }
     }
@@ -366,7 +356,8 @@ class BackofficeController
      *       "la serie a bien été modifie"
      *     }
      */
-    public function updateSerie(Request $req, Response $resp, array $args)
+    public
+    function updateSerie(Request $req, Response $resp, array $args)
     {
         $series = series::findOrFail($args["id"]);
         $token = $req->getAttribute("token");
@@ -430,7 +421,8 @@ class BackofficeController
      *       "la photo a bien été modifiee"
      *     }
      */
-    public function updatePicture(Request $req, Response $resp, array $args)
+    public
+    function updatePicture(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         if ($pictures = picture::find($args["id"])) {
@@ -510,7 +502,8 @@ class BackofficeController
      * ]
      * }
      */
-    public function getSeries(Request $req, Response $resp, array $args)
+    public
+    function getSeries(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         $user = user::find($token->uid);
@@ -558,7 +551,8 @@ class BackofficeController
      * }
      * }
      */
-    public function getSerie(Request $req, Response $resp, array $args)
+    public
+    function getSerie(Request $req, Response $resp, array $args)
     {
         $id = $req->getAttribute("id");
         $token = $req->getAttribute("token");
@@ -577,7 +571,8 @@ class BackofficeController
         }
     }
 
-    public function getPictures(Request $req, Response $resp, array $args)
+    public
+    function getPictures(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         $user = user::find($token->uid);
@@ -596,7 +591,8 @@ class BackofficeController
         }
     }
 
-    public function getPicture(Request $req, Response $resp, array $args)
+    public
+    function getPicture(Request $req, Response $resp, array $args)
     {
         $id = $req->getAttribute("id");
         $token = $req->getAttribute("token");
@@ -644,7 +640,8 @@ class BackofficeController
      *       "cette photo a bien ete associe a cette serie."
      *     }
      */
-    public function seriePicture(Request $req, Response $resp, array $args)
+    public
+    function seriePicture(Request $req, Response $resp, array $args)
     {
         try {
             $token = $req->getAttribute("token");
