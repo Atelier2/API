@@ -53,7 +53,7 @@ class Validator {
 
     public static function addPictureToSeriesValidator() {
         $validator = [
-            'series' => RespectValidator::arrayVal()->key('id', RespectValidator::alnum('-'))
+            'series' => RespectValidator::arrayVal()->each(RespectValidator::alnum('-'))
         ];
 
         return new Validation($validator);

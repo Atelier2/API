@@ -112,7 +112,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://51.91.8.97:18380/users/:id_user/series/:id_series/pictures/",
+    "url": "http://51.91.8.97:18380/users/:id_user/pictures/:id_picture/series/",
     "title": "Ajouter à une Series",
     "group": "Pictures",
     "description": "<p>Ajoute une image existance à des Series du User.</p>",
@@ -131,7 +131,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"series\": [\n    {\n      \"id\": \"cbcf5404-749f-4b55-86e9-e075bc2d94d5\",\n    },\n    {\n      \"id\": \"8744caf9-afec-4bf6-a5f2-e03045ddc8e5\",\n    },\n    {\n      \"id\": \"d9e73a08-9d7e-48a0-bed8-649e8eb73fd1\",\n    }\n  ]\n}",
+          "content": "{\n  \"series\": [\n    \"cbcf5404-749f-4b55-86e9-e075bc2d94d5\",\n    \"8744caf9-afec-4bf6-a5f2-e03045ddc8e5\",\n    \"d9e73a08-9d7e-48a0-bed8-649e8eb73fd1\"\n  ]\n}",
           "type": "json"
         }
       ]
@@ -160,7 +160,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n  \"series\": [\n    {\n      \"id\": \"cbcf5404-749f-4b55-86e9-e075bc2d94d5\",\n    },\n    {\n      \"id\": \"8744caf9-afec-4bf6-a5f2-e03045ddc8e5\",\n    },\n    {\n      \"id\": \"d9e73a08-9d7e-48a0-bed8-649e8eb73fd1\",\n    }\n  ]\n}",
+          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n  \"series\": [\n    \"cbcf5404-749f-4b55-86e9-e075bc2d94d5\",\n    \"8744caf9-afec-4bf6-a5f2-e03045ddc8e5\",\n    \"d9e73a08-9d7e-48a0-bed8-649e8eb73fd1\"\n  ]\n}",
           "type": "json"
         }
       ]
@@ -196,7 +196,7 @@ define({ "api": [
         },
         {
           "title": "PictureDoesNotBelongToUser-Response:",
-          "content": "HTTP/1.1 401 UNAUTHORIZED\n{\n  \"type\": \"error\",\n  \"error\": 401,\n  \"message\": \"This picture doesn't belong this user.\"\n}",
+          "content": "HTTP/1.1 401 UNAUTHORIZED\n{\n  \"type\": \"error\",\n  \"error\": 401,\n  \"message\": \"This picture doesn't belong to this user.\"\n}",
           "type": "json"
         },
         {
@@ -209,7 +209,7 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/PictureController.php",
     "groupTitle": "Pictures",
-    "name": "PostHttp519189718380UsersId_userSeriesId_seriesPictures"
+    "name": "PostHttp519189718380UsersId_userPicturesId_pictureSeries"
   },
   {
     "type": "get",

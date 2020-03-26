@@ -98,7 +98,7 @@ class PictureController {
     }
 
     /**
-     * @api {post} http://51.91.8.97:18380/users/:id_user/series/:id_series/pictures/ Ajouter à une Series
+     * @api {post} http://51.91.8.97:18380/users/:id_user/pictures/:id_picture/series/ Ajouter à une Series
      * @apiGroup Pictures
      *
      * @apiDescription Ajoute une image existance à des Series du User.
@@ -108,15 +108,9 @@ class PictureController {
      * @apiParamExample {json} Request-Example:
      *     {
      *       "series": [
-     *         {
-     *           "id": "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
-     *         },
-     *         {
-     *           "id": "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
-     *         },
-     *         {
-     *           "id": "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1",
-     *         }
+     *         "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
+     *         "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
+     *         "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1"
      *       ]
      *     }
      *
@@ -142,15 +136,9 @@ class PictureController {
      *         "id_user": "18d0eca6-756a-4e3b-9dde-e7a664f562cc"
      *       },
      *       "series": [
-     *         {
-     *           "id": "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
-     *         },
-     *         {
-     *           "id": "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
-     *         },
-     *         {
-     *           "id": "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1",
-     *         }
+     *         "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
+     *         "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
+     *         "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1"
      *       ]
      *     }
      *
@@ -170,7 +158,7 @@ class PictureController {
      *     {
      *       "type": "error",
      *       "error": 401,
-     *       "message": "This picture doesn't belong this user."
+     *       "message": "This picture doesn't belong to this user."
      *     }
      * @apiErrorExample InvalidToken-Response:
      *     HTTP/1.1 401 UNAUTHORIZED
@@ -195,7 +183,7 @@ class PictureController {
                     "series" => $series
                 ]);
             } else {
-                return JSON::errorResponse($response, 401, "This picture doesn't belong this user.");
+                return JSON::errorResponse($response, 401, "This picture doesn't belong to this user.");
             }
         } catch (\Throwable $exception) {
             return JSON::errorResponse($response, 500, "The picture creation failed.");
