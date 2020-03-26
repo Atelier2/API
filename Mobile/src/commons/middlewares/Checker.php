@@ -2,6 +2,7 @@
 namespace GeoQuizz\Mobile\commons\middlewares;
 
 use GeoQuizz\Mobile\commons\writers\JSON;
+use GeoQuizz\Mobile\model\Picture;
 use GeoQuizz\Mobile\model\Series;
 use GeoQuizz\Mobile\model\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,16 +23,31 @@ class Checker {
         }
     }
 
-    public function seriesExists(Request $request, Response $response, callable $next) {
-        $series_id = isset($request->getAttribute('routeInfo')[2]['id']) ? $request->getAttribute('routeInfo')[2]['id'] : $request->getAttribute('routeInfo')[2]['id_series'];
+    public function pictureExists(Request $request, Response $response, callable $next) {
+        $picture_id = isset($request->getAttribute('routeInfo')[2]['id']) ? $request->getAttribute('routeInfo')[2]['id'] : $request->getAttribute('routeInfo')[2]['id_picture'];
 
         try {
-            $series = Series::query()->where('id', '=', $series_id)->firstOrFail();
+            $picture = Picture::query()->where('id', '=', $picture_id)->firstOrFail();
+            $request = $request->withAttribute('picture', $picture);
+
+            return $next($request, $response);
+        } catch (ModelNotFoundException $exception) {
+            return JSON::errorResponse($response, 404, "Picture with ID ".$picture_id." doesn't exist.");
+        }
+    }
+
+    public function seriesExist(Request $request, Response $response, callable $next) {
+        $series = $request->getParsedBody()['series'];
+
+        try {
+            foreach ($series as $seriesId) {
+                Series::query()->where('id', '=', $seriesId)->firstOrFail();
+            }
             $request = $request->withAttribute('series', $series);
 
             return $next($request, $response);
         } catch (ModelNotFoundException $exception) {
-            return JSON::errorResponse($response, 404, "Series with ID ".$series_id." doesn't exist.");
+            return JSON::errorResponse($response, 404, "At least one of the series was not found.");
         }
     }
 }

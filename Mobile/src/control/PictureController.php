@@ -15,7 +15,7 @@ class PictureController {
     }
 
     /**
-     * @api {post} http://51.91.8.97:18380/users/:id/pictures/ Créer
+     * @api {post} http://51.91.8.97:18380/users/:id/pictures/ Ajouter
      * @apiGroup Pictures
      *
      * @apiDescription Ajoute une image à la bibliothèque du User.
@@ -76,6 +76,7 @@ class PictureController {
      */
     public function addPicture(Request $request, Response $response, $args) {
         $body = $request->getParsedBody();
+        $user = $request->getAttribute('user');
 
         try {
             $picture = new Picture();
@@ -84,7 +85,7 @@ class PictureController {
             $picture->latitude = $body['latitude'];
             $picture->longitude = $body['longitude'];
             $picture->link = $body['link'];
-            $picture->id_user = $args['id'];
+            $picture->id_user = $user->id;
             $picture->saveOrFail();
 
             return JSON::successResponse($response, 201, [
@@ -100,19 +101,23 @@ class PictureController {
      * @api {post} http://51.91.8.97:18380/users/:id_user/series/:id_series/pictures/ Ajouter à une Series
      * @apiGroup Pictures
      *
-     * @apiDescription Ajoute une image à une Series du User.
+     * @apiDescription Ajoute une image existance à des Series du User.
      *
-     * @apiParam {String} description La description de l'image.
-     * @apiParam {Number} latitude La latitude de l'image.
-     * @apiParam {Number} longitude La longitude de l'image.
-     * @apiParam {String} link Le lien où est hébergée l'image.
+     * @apiParam {Array} series Les UUID des Series auxquelles ajouter l'image.
      *
      * @apiParamExample {json} Request-Example:
      *     {
-     *       "description": "Place Stanislas",
-     *       "latitude": 38,
-     *       "longitude": 53,
-     *       "link": "https://www.imageshoster.com/image_1"
+     *       "series": [
+     *         {
+     *           "id": "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
+     *         },
+     *         {
+     *           "id": "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
+     *         },
+     *         {
+     *           "id": "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1",
+     *         }
+     *       ]
      *     }
      *
      * @apiHeader {String} Authorization Le token du User.
@@ -136,10 +141,21 @@ class PictureController {
      *         "updated_at": "2020-03-20 00:25:29",
      *         "id_user": "18d0eca6-756a-4e3b-9dde-e7a664f562cc"
      *       },
+     *       "series": [
+     *         {
+     *           "id": "cbcf5404-749f-4b55-86e9-e075bc2d94d5",
+     *         },
+     *         {
+     *           "id": "8744caf9-afec-4bf6-a5f2-e03045ddc8e5",
+     *         },
+     *         {
+     *           "id": "d9e73a08-9d7e-48a0-bed8-649e8eb73fd1",
+     *         }
+     *       ]
      *     }
      *
      * @apiError UserNotFound Le UUID ne correspond à aucun User.
-     * @apiError SeriesDoesNotBelongToUser La Series n'appartient pas au User.
+     * @apiError PictureDoesNotBelongToUser La Series n'appartient pas au User.
      * @apiError InvalidToken Le Token du User est invalide, il doit se reconnecter.
      *
      * @apiErrorExample UserNotFound-Response:
@@ -149,12 +165,12 @@ class PictureController {
      *       "error": 404,
      *       "message": "User with ID db0913fa-934b-4981-9280-dc3bed19adb3 doesn't exist."
      *     }
-     * @apiErrorExample SeriesDoesNotBelongToUser-Response:
+     * @apiErrorExample PictureDoesNotBelongToUser-Response:
      *     HTTP/1.1 401 UNAUTHORIZED
      *     {
      *       "type": "error",
      *       "error": 401,
-     *       "message": "This series doesn't belong this user."
+     *       "message": "This picture doesn't belong this user."
      *     }
      * @apiErrorExample InvalidToken-Response:
      *     HTTP/1.1 401 UNAUTHORIZED
@@ -165,31 +181,24 @@ class PictureController {
      *     }
      */
     public function addPictureToSeries(Request $request, Response $response, $args) {
+        $picture = $request->getAttribute('picture');
+        $user = $request->getAttribute('user');
         $series = $request->getAttribute('series');
-        $body = $request->getParsedBody();
 
         try {
-            if ($series->id_user === $args['id_user']) {
-                $picture = new Picture();
-                $picture->id = Uuid::uuid4();
-                $picture->description = $body['description'];
-                $picture->latitude = $body['latitude'];
-                $picture->longitude = $body['longitude'];
-                $picture->link = $body['link'];
-                $picture->id_user = $args['id_user'];
-                $picture->saveOrFail();
-
-                $series->pictures()->attach([$picture->id]);
+            if ($picture->id_user === $user->id) {
+                $picture->series()->attach([$series]);
 
                 return JSON::successResponse($response, 201, [
                     "type" => "resource",
-                    "picture" => $picture
+                    "picture" => $picture,
+                    "series" => $series
                 ]);
             } else {
-                return JSON::errorResponse($response, 401, "This series doesn't belong this user.");
+                return JSON::errorResponse($response, 401, "This picture doesn't belong this user.");
             }
         } catch (\Throwable $exception) {
-            return JSON::errorResponse($response, 500, "The picture creation failed.".$exception->getMessage());
+            return JSON::errorResponse($response, 500, "The picture creation failed.");
         }
     }
 }

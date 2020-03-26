@@ -12,7 +12,7 @@ class Validator {
     const PONCTUATION = ". ; : ! ? , - _ \" / ' ( ) [ ] { } + = % * $ € £ < > & # @";
 
     public static function createUserValidator() {
-        $validator =  [
+        $validator = [
             'firstname' => RespectValidator::alpha(self::ACCENTS),
             'lastname' => RespectValidator::alpha(self::ACCENTS),
             'email' => RespectValidator::email(),
@@ -28,7 +28,7 @@ class Validator {
     }
 
     public static function createSeriesValidator() {
-        $validator =  [
+        $validator = [
             'city' => RespectValidator::alpha(self::ACCENTS),
             'distance' => RespectValidator::intVal(),
             'latitude' => RespectValidator::floatVal()->positive(),
@@ -41,11 +41,19 @@ class Validator {
     }
 
     public static function addPictureValidator() {
-        $validator =  [
+        $validator = [
             'description' => RespectValidator::alnum(self::ACCENTS." ".self::PONCTUATION),
             'latitude' => RespectValidator::floatVal()->positive(),
             'longitude' => RespectValidator::floatVal()->positive(),
             'link' => RespectValidator::url()
+        ];
+
+        return new Validation($validator);
+    }
+
+    public static function addPictureToSeriesValidator() {
+        $validator = [
+            'series' => RespectValidator::arrayVal()->key('id', RespectValidator::alnum('-'))
         ];
 
         return new Validation($validator);

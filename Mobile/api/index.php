@@ -49,10 +49,13 @@ $app->post('/users/{id}/pictures[/]', PictureController::class.':addPicture')
     ->add(Validator::addPictureValidator())
     ->add(CORS::class.':addCORSHeaders');
 
-$app->post('/users/{id_user}/series/{id_series}/pictures[/]', PictureController::class.':addPictureToSeries')
+$app->post('/users/{id_user}/pictures/{id_picture}/series[/]', PictureController::class.':addPictureToSeries')
     ->add(JWT::class.':checkJWT')
-    ->add(Checker::class.':seriesExists')
+    ->add(Checker::class.':seriesExist')
+    ->add(Checker::class.':pictureExists')
     ->add(Checker::class.':userExists')
+    ->add(Validator::class.':dataFormatErrorHandler')
+    ->add(Validator::addPictureToSeriesValidator())
     ->add(CORS::class.':addCORSHeaders');
 
 $app->options('/{routes:.+}', function ($request, $response, $args) { return $response; })

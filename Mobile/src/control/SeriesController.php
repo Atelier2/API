@@ -78,7 +78,8 @@ class SeriesController {
      *     }
      */
     public function getSeries(Request $request, Response $response, $args) {
-        $series = Series::query()->where('id_user', '=', $args['id'])->get();
+        $user = $request->getAttribute('user');
+        $series = Series::query()->where('id_user', '=', $user->id)->get();
 
         return JSON::successResponse($response, 200, [
             "type" => "resources",
@@ -153,6 +154,7 @@ class SeriesController {
      *     }
      */
     public function createSeries(Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
         $body = $request->getParsedBody();
 
         try {
@@ -164,7 +166,7 @@ class SeriesController {
             $series->longitude = $body['longitude'];
             $series->zoom = $body['zoom'];
             $series->nb_pictures = $body['nb_pictures'];
-            $series->id_user = $args['id'];
+            $series->id_user = $user->id;
             $series->saveOrFail();
 
             return JSON::successResponse($response, 201, [
