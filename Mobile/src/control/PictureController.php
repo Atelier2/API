@@ -30,7 +30,7 @@ class PictureController {
      *       "description": "Place Stanislas",
      *       "latitude": "38",
      *       "longitude": "53",
-     *       "link": "https://www.imageshoster.com/image_1
+     *       "link": "https://www.imageshoster.com/image_1"
      *     }
      *
      * @apiHeader {String} Authorization Le token du User.
@@ -49,7 +49,7 @@ class PictureController {
      *         "description": "Place Stanislas",
      *         "latitude": "38",
      *         "longitude": "53",
-     *         "link": "https://www.imageshoster.com/image_1,
+     *         "link": "https://www.imageshoster.com/image_1",
      *         "created_at": "2020-03-20 00:25:29",
      *         "updated_at": "2020-03-20 00:25:29",
      *         "id_user": "18d0eca6-756a-4e3b-9dde-e7a664f562cc"
@@ -112,7 +112,7 @@ class PictureController {
      *       "description": "Place Stanislas",
      *       "latitude": "38",
      *       "longitude": "53",
-     *       "link": "https://www.imageshoster.com/image_1
+     *       "link": "https://www.imageshoster.com/image_1"
      *     }
      *
      * @apiHeader {String} Authorization Le token du User.
@@ -131,7 +131,7 @@ class PictureController {
      *         "description": "Place Stanislas",
      *         "latitude": "38",
      *         "longitude": "53",
-     *         "link": "https://www.imageshoster.com/image_1,
+     *         "link": "https://www.imageshoster.com/image_1",
      *         "created_at": "2020-03-20 00:25:29",
      *         "updated_at": "2020-03-20 00:25:29",
      *         "id_user": "18d0eca6-756a-4e3b-9dde-e7a664f562cc"
