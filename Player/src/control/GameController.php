@@ -19,7 +19,7 @@ class GameController {
     }
 
     /**
-     * @api {get} https://51.91.8.97:18143/games/leaderboard?page=:page&size=:size Leaderboard
+     * @api {get} http://51.91.8.97:18180/games/leaderboard?page=:page&size=:size Leaderboard
      * @apiGroup Games
      *
      * @apiDescription Récupère toutes les Games classées par le score.
@@ -33,16 +33,16 @@ class GameController {
      *       "type": "resources",
      *       "links": {
      *         "next": {
-     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=2&size=2"
+     *           "href": "http://51.91.8.97:18180/games/leaderboard?page=2&size=2"
      *         },
      *         "prev": {
-     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=0&size=2"
+     *           "href": "http://51.91.8.97:18180/games/leaderboard?page=0&size=2"
      *         },
      *         "last": {
-     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=5&size=2"
+     *           "href": "http://51.91.8.97:18180/games/leaderboard?page=5&size=2"
      *         },
      *         "first": {
-     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=1&size=2"
+     *           "href": "http://51.91.8.97:18180/games/leaderboard?page=1&size=2"
      *         }
      *       },
      *       "games": [
@@ -105,7 +105,7 @@ class GameController {
     }
 
     /**
-     * @api {get} https://51.91.8.97:18143/games/:id/ Obtenir
+     * @api {get} http://51.91.8.97:18180/games/:id/ Obtenir
      * @apiGroup Games
      *
      * @apiDescription Récupère une Game.
@@ -125,7 +125,7 @@ class GameController {
      *       "type": "resource",
      *       "links": {
      *         "leaderboard": {
-     *           "href": "https://51.91.8.97:18143/games/leaderboard/"
+     *           "href": "http://51.91.8.97:18180/games/leaderboard/"
      *         }
      *       },
      *       "game": {
@@ -173,7 +173,7 @@ class GameController {
     }
 
     /**
-     * @api {post} https://51.91.8.97:18143/games/ Créer
+     * @api {post} http://51.91.8.97:18180/games/ Créer
      * @apiGroup Games
      *
      * @apiDescription Crée une Game.
@@ -248,7 +248,7 @@ class GameController {
     }
 
     /**
-     * @api {put} https://51.91.8.97:18143/games/:id/ Modifier
+     * @api {put} http://51.91.8.97:18180/games/:id/ Modifier
      * @apiGroup Games
      *
      * @apiDescription Modifie une Game existante.

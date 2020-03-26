@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "post",
-    "url": "https://51.91.8.97:18343/users/:id/pictures/",
+    "url": "http://51.91.8.97:18380/users/:id/pictures/",
     "title": "Créer",
     "group": "Pictures",
     "description": "<p>Ajoute une image à la bibliothèque du User.</p>",
@@ -108,11 +108,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/PictureController.php",
     "groupTitle": "Pictures",
-    "name": "PostHttps519189718343UsersIdPictures"
+    "name": "PostHttp519189718380UsersIdPictures"
   },
   {
     "type": "post",
-    "url": "https://51.91.8.97:18343/users/:id_user/series/:id_series/pictures/",
+    "url": "http://51.91.8.97:18380/users/:id_user/series/:id_series/pictures/",
     "title": "Ajouter à une Series",
     "group": "Pictures",
     "description": "<p>Ajoute une image à une Series du User.</p>",
@@ -230,11 +230,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/PictureController.php",
     "groupTitle": "Pictures",
-    "name": "PostHttps519189718343UsersId_userSeriesId_seriesPictures"
+    "name": "PostHttp519189718380UsersId_userSeriesId_seriesPictures"
   },
   {
     "type": "get",
-    "url": "https://51.91.8.97:18343/users/:id/series/",
+    "url": "http://51.91.8.97:18380/users/:id/series/",
     "title": "Liste",
     "group": "Series",
     "description": "<p>Récupère les Series d'un User.</p>",
@@ -300,11 +300,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/SeriesController.php",
     "groupTitle": "Series",
-    "name": "GetHttps519189718343UsersIdSeries"
+    "name": "GetHttp519189718380UsersIdSeries"
   },
   {
     "type": "post",
-    "url": "https://51.91.8.97:18343/users/:id/series/",
+    "url": "http://51.91.8.97:18380/users/:id/series/",
     "title": "Créer",
     "group": "Series",
     "description": "<p>Crée une Series pour un User.</p>",
@@ -425,11 +425,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/SeriesController.php",
     "groupTitle": "Series",
-    "name": "PostHttps519189718343UsersIdSeries"
+    "name": "PostHttp519189718380UsersIdSeries"
   },
   {
     "type": "post",
-    "url": "https://51.91.8.97:18343/users/signin/",
+    "url": "http://51.91.8.97:18380/users/signin/",
     "title": "Connecter",
     "group": "Users",
     "description": "<p>Connecte un User.</p>",
@@ -484,11 +484,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/UserController.php",
     "groupTitle": "Users",
-    "name": "PostHttps519189718343UsersSignin"
+    "name": "PostHttp519189718380UsersSignin"
   },
   {
     "type": "post",
-    "url": "https://51.91.8.97:18343/users/signup/",
+    "url": "http://51.91.8.97:18380/users/signup/",
     "title": "Créer",
     "group": "Users",
     "description": "<p>Crée un User.</p>",
@@ -599,6 +599,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/UserController.php",
     "groupTitle": "Users",
-    "name": "PostHttps519189718343UsersSignup"
+    "name": "PostHttp519189718380UsersSignup"
   }
 ] });

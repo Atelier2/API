@@ -15,7 +15,7 @@ class PictureController {
     }
 
     /**
-     * @api {post} https://51.91.8.97:18343/users/:id/pictures/ Créer
+     * @api {post} http://51.91.8.97:18380/users/:id/pictures/ Créer
      * @apiGroup Pictures
      *
      * @apiDescription Ajoute une image à la bibliothèque du User.
@@ -97,7 +97,7 @@ class PictureController {
     }
 
     /**
-     * @api {post} https://51.91.8.97:18343/users/:id_user/series/:id_series/pictures/ Ajouter à une Series
+     * @api {post} http://51.91.8.97:18380/users/:id_user/series/:id_series/pictures/ Ajouter à une Series
      * @apiGroup Pictures
      *
      * @apiDescription Ajoute une image à une Series du User.

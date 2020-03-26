@@ -16,7 +16,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} https://51.91.8.97:18143/series/ Liste
+     * @api {get} http://51.91.8.97:18180/series/ Liste
      * @apiGroup Series
      *
      * @apiDescription Récupère toutes les Series.
@@ -27,7 +27,7 @@ class SeriesController {
      *       "type": "resources",
      *       "links": {
      *         "one_series": {
-     *           "href": "https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
+     *           "href": "http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
      *         }
      *       },
      *       "series": [
@@ -75,7 +75,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} https://51.91.8.97:18143/series/:id/ Obtenir
+     * @api {get} http://51.91.8.97:18180/series/:id/ Obtenir
      * @apiGroup Series
      *
      * @apiDescription Récupère une Series.
@@ -88,10 +88,10 @@ class SeriesController {
      *       "type": "resource",
      *       "links": {
      *         "pictures": {
-     *           "href": "https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/"
+     *           "href": "http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/"
      *         },
      *         "all_series": {
-     *           "href": "https://51.91.8.97:18143/series/"
+     *           "href": "http://51.91.8.97:18180/series/"
      *         }
      *       },
      *       "series": {
@@ -136,7 +136,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} https://51.91.8.97:18143/series/:id/pictures/ Photos
+     * @api {get} http://51.91.8.97:18180/series/:id/pictures/ Photos
      * @apiGroup Series
      *
      * @apiDescription Récupère les photos d'une Series.
@@ -149,10 +149,10 @@ class SeriesController {
      *       "type": "resources",
      *       "links": {
      *         "series": {
-     *           "href": "https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
+     *           "href": "http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/"
      *         },
      *         "all_series": {
-     *           "href": "https://51.91.8.97:18143/series/"
+     *           "href": "http://51.91.8.97:18180/series/"
      *         }
      *       },
      *       "pictures": [

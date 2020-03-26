@@ -17,7 +17,7 @@ class UserController {
     }
 
     /**
-     * @api {post} https://51.91.8.97:18343/users/signup/ Créer
+     * @api {post} http://51.91.8.97:18380/users/signup/ Créer
      * @apiGroup Users
      *
      * @apiDescription Crée un User.
@@ -114,7 +114,7 @@ class UserController {
     }
 
     /**
-     * @api {post} https://51.91.8.97:18343/users/signin/ Connecter
+     * @api {post} http://51.91.8.97:18380/users/signin/ Connecter
      * @apiGroup Users
      *
      * @apiDescription Connecte un User.

@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "https://51.91.8.97:18143/games/:id/",
+    "url": "http://51.91.8.97:18180/games/:id/",
     "title": "Obtenir",
     "group": "Games",
     "description": "<p>Récupère une Game.</p>",
@@ -42,7 +42,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"leaderboard\": {\n      \"href\": \"https://51.91.8.97:18143/games/leaderboard/\"\n    }\n  },\n  \"game\": {\n    \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n    \"score\": 0,\n    \"pseudo\": \"Albert Einstein\",\n    \"id_status\": 0,\n    \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"leaderboard\": {\n      \"href\": \"http://51.91.8.97:18180/games/leaderboard/\"\n    }\n  },\n  \"game\": {\n    \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n    \"score\": 0,\n    \"pseudo\": \"Albert Einstein\",\n    \"id_status\": 0,\n    \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -80,11 +80,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/GameController.php",
     "groupTitle": "Games",
-    "name": "GetHttps519189718143GamesId"
+    "name": "GetHttp519189718180GamesId"
   },
   {
     "type": "get",
-    "url": "https://51.91.8.97:18143/games/leaderboard?page=:page&size=:size",
+    "url": "http://51.91.8.97:18180/games/leaderboard?page=:page&size=:size",
     "title": "Leaderboard",
     "group": "Games",
     "description": "<p>Récupère toutes les Games classées par le score.</p>",
@@ -112,7 +112,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"next\": {\n      \"href\": \"https://51.91.8.97:18143/games/leaderboard?page=2&size=2\"\n    },\n    \"prev\": {\n      \"href\": \"https://51.91.8.97:18143/games/leaderboard?page=0&size=2\"\n    },\n    \"last\": {\n      \"href\": \"https://51.91.8.97:18143/games/leaderboard?page=5&size=2\"\n    },\n    \"first\": {\n      \"href\": \"https://51.91.8.97:18143/games/leaderboard?page=1&size=2\"\n    }\n  },\n  \"games\": [\n    {\n      \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1500,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"5a705236-4414-45fc-aed5-496j47b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1000,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"next\": {\n      \"href\": \"http://51.91.8.97:18180/games/leaderboard?page=2&size=2\"\n    },\n    \"prev\": {\n      \"href\": \"http://51.91.8.97:18180/games/leaderboard?page=0&size=2\"\n    },\n    \"last\": {\n      \"href\": \"http://51.91.8.97:18180/games/leaderboard?page=5&size=2\"\n    },\n    \"first\": {\n      \"href\": \"http://51.91.8.97:18180/games/leaderboard?page=1&size=2\"\n    }\n  },\n  \"games\": [\n    {\n      \"id\": \"5a005636-4514-45cc-a6d5-496847b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1500,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"5a705236-4414-45fc-aed5-496j47b0adbf\",\n      \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhcGlfcGxheWVyIiwic3ViIjoiZ2FtZSIsImF1ZCI6InBsYXllciIsImlhdCI6MTU4NDc0NTQ0NywiZXhwIjoxNTg0NzU2MjQ3fQ.vkaSPuOdb95IHWRFda9RGszEflYh8CGxhaKVHS3vredJSl2WyqqNTg_VUbfkx60A3cdClmcBqmyQdJnV3-l1xA\",\n      \"score\": 1000,\n      \"pseudo\": \"Albert Einstein\",\n      \"id_status\": 2,\n      \"id_series\": \"8d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -120,11 +120,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/GameController.php",
     "groupTitle": "Games",
-    "name": "GetHttps519189718143GamesLeaderboardPagePageSizeSize"
+    "name": "GetHttp519189718180GamesLeaderboardPagePageSizeSize"
   },
   {
     "type": "post",
-    "url": "https://51.91.8.97:18143/games/",
+    "url": "http://51.91.8.97:18180/games/",
     "title": "Créer",
     "group": "Games",
     "description": "<p>Crée une Game.</p>",
@@ -186,11 +186,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/GameController.php",
     "groupTitle": "Games",
-    "name": "PostHttps519189718143Games"
+    "name": "PostHttp519189718180Games"
   },
   {
     "type": "put",
-    "url": "https://51.91.8.97:18143/games/:id/",
+    "url": "http://51.91.8.97:18180/games/:id/",
     "title": "Modifier",
     "group": "Games",
     "description": "<p>Modifie une Game existante.</p>",
@@ -295,11 +295,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/GameController.php",
     "groupTitle": "Games",
-    "name": "PutHttps519189718143GamesId"
+    "name": "PutHttp519189718180GamesId"
   },
   {
     "type": "get",
-    "url": "https://51.91.8.97:18143/series/",
+    "url": "http://51.91.8.97:18180/series/",
     "title": "Liste",
     "group": "Series",
     "description": "<p>Récupère toutes les Series.</p>",
@@ -307,7 +307,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"one_series\": {\n      \"href\": \"https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    }\n  },\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": 38,\n      \"longitude\": 53,\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": 52,\n      \"longitude\": 65,\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"one_series\": {\n      \"href\": \"http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    }\n  },\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": 38,\n      \"longitude\": 53,\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": 52,\n      \"longitude\": 65,\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -315,11 +315,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/SeriesController.php",
     "groupTitle": "Series",
-    "name": "GetHttps519189718143Series"
+    "name": "GetHttp519189718180Series"
   },
   {
     "type": "get",
-    "url": "https://51.91.8.97:18143/series/:id/",
+    "url": "http://51.91.8.97:18180/series/:id/",
     "title": "Obtenir",
     "group": "Series",
     "description": "<p>Récupère une Series.</p>",
@@ -340,7 +340,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"pictures\": {\n      \"href\": \"https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/\"\n    },\n    \"all_series\": {\n      \"href\": \"https://51.91.8.97:18143/series/\"\n    }\n  },\n  \"series\": {\n    \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resource\",\n  \"links\": {\n    \"pictures\": {\n      \"href\": \"http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/pictures/\"\n    },\n    \"all_series\": {\n      \"href\": \"http://51.91.8.97:18180/series/\"\n    }\n  },\n  \"series\": {\n    \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -367,11 +367,11 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/SeriesController.php",
     "groupTitle": "Series",
-    "name": "GetHttps519189718143SeriesId"
+    "name": "GetHttp519189718180SeriesId"
   },
   {
     "type": "get",
-    "url": "https://51.91.8.97:18143/series/:id/pictures/",
+    "url": "http://51.91.8.97:18180/series/:id/pictures/",
     "title": "Photos",
     "group": "Series",
     "description": "<p>Récupère les photos d'une Series.</p>",
@@ -392,7 +392,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"series\": {\n      \"href\": \"https://51.91.8.97:18143/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    },\n    \"all_series\": {\n      \"href\": \"https://51.91.8.97:18143/series/\"\n    }\n  },\n  \"pictures\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"description\": \"photo 1\",\n      \"latitude\": 25,\n      \"longitude\": 35,\n      \"link\": \"http://www.example.fr/photo1.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d02ca6-746a-4e3b-9dfe-e7h664f562cc\",\n      \"description\": \"photo 2\",\n      \"latitude\": 24,\n      \"longitude\": 35,\n      \"link\": \"http://www.example.fr/photo2.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"links\": {\n    \"series\": {\n      \"href\": \"http://51.91.8.97:18180/series/18d0eca6-756a-4e3b-9dde-e7a664f562cc/\"\n    },\n    \"all_series\": {\n      \"href\": \"http://51.91.8.97:18180/series/\"\n    }\n  },\n  \"pictures\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"description\": \"photo 1\",\n      \"latitude\": 25,\n      \"longitude\": 35,\n      \"link\": \"http://www.example.fr/photo1.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d02ca6-746a-4e3b-9dfe-e7h664f562cc\",\n      \"description\": \"photo 2\",\n      \"latitude\": 24,\n      \"longitude\": 35,\n      \"link\": \"http://www.example.fr/photo2.png\",\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -419,6 +419,6 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "src/control/SeriesController.php",
     "groupTitle": "Series",
-    "name": "GetHttps519189718143SeriesIdPictures"
+    "name": "GetHttp519189718180SeriesIdPictures"
   }
 ] });
