@@ -175,7 +175,7 @@ class PictureController {
 
         try {
             if ($picture->id_user === $user->id) {
-                $picture->series()->attach([$series]);
+                $picture->series()->attach($series);
 
                 return JSON::successResponse($response, 201, [
                     "type" => "resource",
