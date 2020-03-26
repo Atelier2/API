@@ -95,7 +95,7 @@ nbdist/
 composer.phar
 vendor/
 !Player/api/docs/vendor/
-!Mobile/doc/vendor/
+!Mobile/api/docs/vendor/
 !Backoffice/api/docs/vendor/
 
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file

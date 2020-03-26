@@ -19,7 +19,7 @@ class GameController {
     }
 
     /**
-     * @api {get} https://api.player.local.19143/games/leaderboard?page=:page&size=:size Leaderboard
+     * @api {get} https://51.91.8.97:18143/games/leaderboard?page=:page&size=:size Leaderboard
      * @apiGroup Games
      *
      * @apiDescription Récupère toutes les Games classées par le score.
@@ -33,16 +33,16 @@ class GameController {
      *       "type": "resources",
      *       "links": {
      *         "next": {
-     *           "href": "https://api.player.local.19143/games/leaderboard?page=2&size=2"
+     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=2&size=2"
      *         },
      *         "prev": {
-     *           "href": "https://api.player.local.19143/games/leaderboard?page=0&size=2"
+     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=0&size=2"
      *         },
      *         "last": {
-     *           "href": "https://api.player.local.19143/games/leaderboard?page=5&size=2"
+     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=5&size=2"
      *         },
      *         "first": {
-     *           "href": "https://api.player.local.19143/games/leaderboard?page=1&size=2"
+     *           "href": "https://51.91.8.97:18143/games/leaderboard?page=1&size=2"
      *         }
      *       },
      *       "games": [
@@ -105,7 +105,7 @@ class GameController {
     }
 
     /**
-     * @api {get} https://api.player.local.19143/games/:id/ Obtenir
+     * @api {get} https://51.91.8.97:18143/games/:id/ Obtenir
      * @apiGroup Games
      *
      * @apiDescription Récupère une Game.
@@ -125,7 +125,7 @@ class GameController {
      *       "type": "resource",
      *       "links": {
      *         "leaderboard": {
-     *           "href": "https://api.player.local.19143/games/leaderboard/"
+     *           "href": "https://51.91.8.97:18143/games/leaderboard/"
      *         }
      *       },
      *       "game": {
@@ -173,7 +173,7 @@ class GameController {
     }
 
     /**
-     * @api {post} https://api.player.local.19143/games/ Créer
+     * @api {post} https://51.91.8.97:18143/games/ Créer
      * @apiGroup Games
      *
      * @apiDescription Crée une Game.
@@ -248,7 +248,7 @@ class GameController {
     }
 
     /**
-     * @api {put} https://api.player.local.19143/games/:id/ Modifier
+     * @api {put} https://51.91.8.97:18143/games/:id/ Modifier
      * @apiGroup Games
      *
      * @apiDescription Modifie une Game existante.

@@ -15,7 +15,7 @@ class SeriesController {
     }
 
     /**
-     * @api {get} https://api.mobile.local.19343/users/:id/series/ Liste
+     * @api {get} https://51.91.8.97:18343/users/:id/series/ Liste
      * @apiGroup Series
      *
      * @apiDescription Récupère les Series d'un User.
@@ -87,7 +87,7 @@ class SeriesController {
     }
 
     /**
-     * @api {post} https://api.mobile.local.19343/users/:id/series/ Créer
+     * @api {post} https://51.91.8.97:18343/users/:id/series/ Créer
      * @apiGroup Series
      *
      * @apiDescription Crée une Series pour un User.
