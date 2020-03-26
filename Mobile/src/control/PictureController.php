@@ -186,7 +186,7 @@ class PictureController {
                 return JSON::errorResponse($response, 401, "This picture doesn't belong to this user.");
             }
         } catch (\Throwable $exception) {
-            return JSON::errorResponse($response, 500, "The picture creation failed.");
+            return JSON::errorResponse($response, 500, "Adding the picture to the series failed.".$exception->getMessage());
         }
     }
 }
