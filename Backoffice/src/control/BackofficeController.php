@@ -25,7 +25,7 @@ class BackofficeController
      * @api {post} http://api.backoffice.local:19280/user/signin se connecter avec un membre.
      * @apiName userSignin
      * @apiGroup User
-     * @apiHeader {String} BasicAuth  user_email  & user_password.
+     * @apiHeader {Basic_Auth} Authorization  email et mot de passe de l'utilisateur.
      * @apiSuccess {String} JWT token de session.
      * @apiSuccessExample Success-Response:
      *     HTTP/1.1 200 OK
@@ -142,7 +142,11 @@ class BackofficeController
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
      *  curl -X POST http://api.backoffice.local:19280/series
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {String} city La ville de la serie.
      * @apiParam {Number} distance De la serie.
      * @apiParam {String} latitude coordonnées gps latitude.
@@ -197,12 +201,16 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/picture Envoyer une photo.
+     * @api {post} http://api.backoffice.local:19280/pictures Envoyer une photo.
      * @apiName insertPicture
      * @apiGroup Picture
      * @apiExample {curl} Example usage:
-     *  curl -X POST http://api.backoffice.local:19280/picture
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     *  curl -X POST http://api.backoffice.local:19280/pictures
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {String} description description de la photo.
      * @apiParam {String} latitude coordonnées gps latitude.
      * @apiParam {String} longitude coordonnées gps longitude.
@@ -250,12 +258,16 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/series/{id}/pictures Associer des photos a des series.
+     * @api {post} http://api.backoffice.local:19280/series/{id}/pictures Associer des photos a une series.
      * @apiName seriesPictures
      * @apiGroup Series
      * @apiExample {curl} Example usage:
      *     curl -X POST http://api.backoffice.local:19280/series/53e5def2-63ee-4531-ac9f-d12a80af9247/pictures
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {Number} Id id de la série a associé.
      * @apiParam {Array} Pictures Tableau contenant les Ids des photos a associé.
      * @apiParamExample {json} Request-Example:
@@ -277,46 +289,36 @@ class BackofficeController
     public function seriesPictures(Request $req, Response $resp, array $args)
     {
         try {
-            if ($series = series::find($args["id"])) {
-                $token = $req->getAttribute("token");
-                if ($series->id_user == $token->uid) {
-                    if (!$req->getAttribute('errors')) {
-                        $getBody = $req->getBody();
-                        $json = json_decode($getBody, true);
-                        foreach ($json["pictures"] as $picture) {
-                            if ($pictures = picture::find($picture["id"]) and $pictures->id_user == $token->uid) {
-                                $series->series_pictures()->attach($picture["id"]);
-                            } else {
-                                echo "cette photo ne peut pas etre associe.";
-                            }
+            $token = $req->getAttribute("token");
+            if ($series = series::find($args["id"]) and $series->id_user == $token->uid) {
+                if (!$req->getAttribute('errors')) {
+                    $getBody = $req->getBody();
+                    $json = json_decode($getBody, true);
+                    foreach ($json["pictures"] as $picture) {
+                        if ($pictures = picture::find($picture["id"]) and $pictures->id_user == $token->uid) {
+                            $series->series_pictures()->attach($picture["id"]);
+                            echo $picture["id"] . ' ' . "cette photo a bien été associé.";
+                        } else {
+                            echo $picture["id"] . ' ' . "cette photo ne peut pas être associée.";
                         }
-                        $rs = $resp->withStatus(200)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode("les photos ont bien été associées à cette série."));
-                        return $rs;
-                    } else {
-                        $errors = $req->getAttribute('errors');
-                        $rs = $resp->withStatus(400)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode($errors));
-                        return $rs;
                     }
                 } else {
+                    $errors = $req->getAttribute('errors');
                     $rs = $resp->withStatus(400)
                         ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer  cette serie"));
+                    $rs->getBody()->write(json_encode($errors));
                     return $rs;
                 }
             } else {
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("cette serie n'existe pas"));
+                $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette serie"));
                 return $rs;
             }
         } catch (QueryException $queryException) {
             $rs = $resp->withStatus(400)
                 ->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode("ces photos sont déjà associée à cette série"));
+            $rs->getBody()->write(json_encode("ces photos sont déjà associées cette série"));
             return $rs;
         }
     }
@@ -327,7 +329,11 @@ class BackofficeController
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
      *  curl -X PUT http://api.backoffice.local:19280/series/5451d518-6863-409b-af77-0c29119b931c
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {Number} id id de la série a modifié.
      * @apiParam {String} city La ville de la serie.
      * @apiParam {Number} distance De la serie.
@@ -350,7 +356,8 @@ class BackofficeController
      *       "la serie a bien été modifie"
      *     }
      */
-    public function updateSerie(Request $req, Response $resp, array $args)
+    public
+    function updateSerie(Request $req, Response $resp, array $args)
     {
         $series = series::findOrFail($args["id"]);
         $token = $req->getAttribute("token");
@@ -386,12 +393,16 @@ class BackofficeController
     }
 
     /**
-     * @api {put} http://api.backoffice.local:19280/picture/{id} Modifier une photo.
+     * @api {put} http://api.backoffice.local:19280/pictures/{id} Modifier une photo.
      * @apiName updatePicture
      * @apiGroup Picture
      * @apiExample {curl} Example usage:
-     *  curl -X PUT http://api.backoffice.local:19280/picture/3a192e17-e853-41af-80b7-c457e860e166
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     *  curl -X PUT http://api.backoffice.local:19280/pictures/3a192e17-e853-41af-80b7-c457e860e166
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {Number} id id de la photo a modifié.
      * @apiParam {String} description description de la photo.
      * @apiParam {String} latitude coordonnées gps latitude.
@@ -410,7 +421,8 @@ class BackofficeController
      *       "la photo a bien été modifiee"
      *     }
      */
-    public function updatePicture(Request $req, Response $resp, array $args)
+    public
+    function updatePicture(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         if ($pictures = picture::find($args["id"])) {
@@ -449,12 +461,16 @@ class BackofficeController
     }
 
     /**
-     * @api {get} http://api.backoffice.local:19280/series Récupérer toutes les series existantes.
+     * @api {get} http://api.backoffice.local:19280/series Récupérer toutes les series.
      * @apiName getSeries
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
      *  curl http://api.backoffice.local:19280/series
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiSuccessExample Success-Response:
      * {
      * "type": "collection",
@@ -486,7 +502,8 @@ class BackofficeController
      * ]
      * }
      */
-    public function getSeries(Request $req, Response $resp, array $args)
+    public
+    function getSeries(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         $user = user::find($token->uid);
@@ -506,12 +523,16 @@ class BackofficeController
     }
 
     /**
-     * @api {get} http://api.backoffice.local:19280/series/{id} Récupérer une serie existantes.
+     * @api {get} http://api.backoffice.local:19280/series/{id} Récupérer une serie.
      * @apiName getSerie
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
      *  curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2
-     * @apiHeader {String} BearerToken  JWT de l'utilisateur connecte.
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
      * @apiParam {String}  id identifiant de la série recherchée.
      * @apiSuccessExample Success-Response:
      * {
@@ -530,7 +551,8 @@ class BackofficeController
      * }
      * }
      */
-    public function getSerie(Request $req, Response $resp, array $args)
+    public
+    function getSerie(Request $req, Response $resp, array $args)
     {
         $id = $req->getAttribute("id");
         $token = $req->getAttribute("token");
@@ -549,7 +571,8 @@ class BackofficeController
         }
     }
 
-    public function getPictures(Request $req, Response $resp, array $args)
+    public
+    function getPictures(Request $req, Response $resp, array $args)
     {
         $token = $req->getAttribute("token");
         $user = user::find($token->uid);
@@ -568,7 +591,8 @@ class BackofficeController
         }
     }
 
-    public function getPicture(Request $req, Response $resp, array $args)
+    public
+    function getPicture(Request $req, Response $resp, array $args)
     {
         $id = $req->getAttribute("id");
         $token = $req->getAttribute("token");
@@ -593,37 +617,53 @@ class BackofficeController
         }
     }
 
-    public function seriePicture(Request $req, Response $resp, array $args)
+    /**
+     * @api {post} http://api.backoffice.local:19280/serie/{id}/picture Associer une photo a une serie.
+     * @apiName seriePicture
+     * @apiGroup Series
+     * @apiExample {curl} Example usage:
+     *     curl -X POST http://api.backoffice.local:19280/serie/53e5def2-63ee-4531-ac9f-d12a80af9247/picture
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
+     * @apiParam {Number} id id de la série a associé.
+     * @apiParam {Number} Id Id de la photo a associé.
+     * @apiParamExample {json} Request-Example:
+     *   {
+     *      "id": "6770cc1c-49dc-48e0-8822-5ce6e72151f9"
+     *   }
+     * @apiSuccessExample Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "cette photo a bien ete associe a cette serie."
+     *     }
+     */
+    public
+    function seriePicture(Request $req, Response $resp, array $args)
     {
         try {
-            if ($series = series::find($args["id"])) {
-                $token = $req->getAttribute("token");
-                if ($series->id_user == $token->uid) {
-                    $getBody = $req->getBody();
-                    $json = json_decode($getBody, true);
-                    $pictures = picture::find($json["id"]);
-                    if ($pictures->id_user == $token->uid) {
-                        $series->series_pictures()->attach($pictures["id"]);
-                        $rs = $resp->withStatus(200)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode(["series uuid" => $series->id, "pictures uuid" => $pictures->id, "user uuid" => $token->uid, "message" => 'cette photo a bien ete associe a cette serie']));
-                        return $rs;
-                    } else {
-                        $rs = $resp->withStatus(400)
-                            ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                        $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette photo"));
-                        return $rs;
-                    }
+            $token = $req->getAttribute("token");
+            if ($series = series::find($args["id"]) and $series->id_user == $token->uid) {
+                $getBody = $req->getBody();
+                $json = json_decode($getBody, true);
+                if ($pictures = picture::find($json["id"]) and $pictures->id_user == $token->uid) {
+                    $series->series_pictures()->attach($pictures["id"]);
+                    $rs = $resp->withStatus(200)
+                        ->withHeader('Content-Type', 'application/json;charset=utf-8');
+                    $rs->getBody()->write(json_encode(["series uuid" => $series->id, "pictures uuid" => $pictures->id, "user uuid" => $token->uid, "message" => 'cette photo a bien ete associe a cette serie']));
+                    return $rs;
                 } else {
                     $rs = $resp->withStatus(400)
                         ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette serie"));
+                    $rs->getBody()->write(json_encode("vous ne pouvez pas associer cette photo"));
                     return $rs;
                 }
             } else {
                 $rs = $resp->withStatus(400)
                     ->withHeader('Content-Type', 'application/json;charset=utf-8');
-                $rs->getBody()->write(json_encode("cette serie n'existe pas."));
+                $rs->getBody()->write(json_encode("vous ne pouvez pas associer à cette série."));
                 return $rs;
             }
         } catch (QueryException $queryException) {
