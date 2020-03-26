@@ -41,7 +41,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"description\": \"Place Stanislas\",\n  \"latitude\": \"38\",\n  \"longitude\": \"53\",\n  \"link\": \"https://www.imageshoster.com/image_1\"\n}",
+          "content": "{\n  \"description\": \"Place Stanislas\",\n  \"latitude\": 38,\n  \"longitude\": 53,\n  \"link\": \"https://www.imageshoster.com/image_1\"\n}",
           "type": "json"
         }
       ]
@@ -70,7 +70,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": \"38\",\n    \"longitude\": \"53\",\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
+          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
           "type": "json"
         }
       ]
@@ -152,7 +152,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"description\": \"Place Stanislas\",\n  \"latitude\": \"38\",\n  \"longitude\": \"53\",\n  \"link\": \"https://www.imageshoster.com/image_1\"\n}",
+          "content": "{\n  \"description\": \"Place Stanislas\",\n  \"latitude\": 38,\n  \"longitude\": 53,\n  \"link\": \"https://www.imageshoster.com/image_1\"\n}",
           "type": "json"
         }
       ]
@@ -181,7 +181,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": \"38\",\n    \"longitude\": \"53\",\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
+          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"picture\": {\n    \"id\": \"18d0bca6-756a-4edb-94de-e7a764f562cc\",\n    \"description\": \"Place Stanislas\",\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"link\": \"https://www.imageshoster.com/image_1\",\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
           "type": "json"
         }
       ]
@@ -262,7 +262,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": \"38\",\n      \"longitude\": \"53\",\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": \"52\",\n      \"longitude\": \"65\",\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"type\": \"resources\",\n  \"series\": [\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Nancy\",\n      \"distance\": 100,\n      \"latitude\": 38,\n      \"longitude\": 53,\n      \"zoom\": 7,\n      \"nb_pictures\": 2,\n      \"created_at\": \"2020-03-20 00:25:29\",\n      \"updated_at\": \"2020-03-20 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    },\n    {\n      \"id\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\",\n      \"city\": \"Paris\",\n      \"distance\": 80,\n      \"latitude\": 52,\n      \"longitude\": 65,\n      \"zoom\": 9,\n      \"nb_pictures\": 7,\n      \"created_at\": \"2020-03-21 00:25:29\",\n      \"updated_at\": \"2020-03-21 00:25:29\",\n      \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -358,7 +358,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"city\": \"Nancy\",\n  \"distance\": 100,\n  \"latitude\": \"38\",\n  \"longitude\": \"53\",\n  \"zoom\": 7,\n  \"nb_pictures\": 2\n}",
+          "content": "{\n  \"city\": \"Nancy\",\n  \"distance\": 100,\n  \"latitude\": 38,\n  \"longitude\": 53,\n  \"zoom\": 7,\n  \"nb_pictures\": 2\n}",
           "type": "json"
         }
       ]
@@ -387,7 +387,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"series\": {\n    \"id\": \"18d07ca6-7562-4a3b-9d9e-e7a264f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": \"38\",\n    \"longitude\": \"53\",\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
+          "content": "HTTP/1.1 201 CREATED\n{\n  \"type\": \"resources\",\n  \"series\": {\n    \"id\": \"18d07ca6-7562-4a3b-9d9e-e7a264f562cc\",\n    \"city\": \"Nancy\",\n    \"distance\": 100,\n    \"latitude\": 38,\n    \"longitude\": 53,\n    \"zoom\": 7,\n    \"nb_pictures\": 2,\n    \"created_at\": \"2020-03-20 00:25:29\",\n    \"updated_at\": \"2020-03-20 00:25:29\",\n    \"id_user\": \"18d0eca6-756a-4e3b-9dde-e7a664f562cc\"\n  },\n}",
           "type": "json"
         }
       ]

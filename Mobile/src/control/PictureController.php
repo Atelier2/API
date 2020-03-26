@@ -28,8 +28,8 @@ class PictureController {
      * @apiParamExample {json} Request-Example:
      *     {
      *       "description": "Place Stanislas",
-     *       "latitude": "38",
-     *       "longitude": "53",
+     *       "latitude": 38,
+     *       "longitude": 53,
      *       "link": "https://www.imageshoster.com/image_1"
      *     }
      *
@@ -47,8 +47,8 @@ class PictureController {
      *       "picture": {
      *         "id": "18d0bca6-756a-4edb-94de-e7a764f562cc",
      *         "description": "Place Stanislas",
-     *         "latitude": "38",
-     *         "longitude": "53",
+     *         "latitude": 38,
+     *         "longitude": 53,
      *         "link": "https://www.imageshoster.com/image_1",
      *         "created_at": "2020-03-20 00:25:29",
      *         "updated_at": "2020-03-20 00:25:29",
@@ -110,8 +110,8 @@ class PictureController {
      * @apiParamExample {json} Request-Example:
      *     {
      *       "description": "Place Stanislas",
-     *       "latitude": "38",
-     *       "longitude": "53",
+     *       "latitude": 38,
+     *       "longitude": 53,
      *       "link": "https://www.imageshoster.com/image_1"
      *     }
      *
@@ -129,8 +129,8 @@ class PictureController {
      *       "picture": {
      *         "id": "18d0bca6-756a-4edb-94de-e7a764f562cc",
      *         "description": "Place Stanislas",
-     *         "latitude": "38",
-     *         "longitude": "53",
+     *         "latitude": 38,
+     *         "longitude": 53,
      *         "link": "https://www.imageshoster.com/image_1",
      *         "created_at": "2020-03-20 00:25:29",
      *         "updated_at": "2020-03-20 00:25:29",
