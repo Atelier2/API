@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Validator {
     const ACCENTS = "À à Â â Ä ä Ç ç É é È è Ê ê Ë ë Î î Ï ï Ô ô Ö ö Ù ù Û û Ü ü";
-    const PONCTUATION = ". ; : ! ? , - _ \" / ' ( ) [ ] { } + = % * $ € £ < > & # @";
+    const PONCTUATION = ". ; : ! ? , - _ \" / ' ( ) [ ] { } + = % * $ € £ & # @";
 
     public static function createUserValidator() {
         $validator = [
@@ -29,7 +29,7 @@ class Validator {
 
     public static function createSeriesValidator() {
         $validator = [
-            'city' => RespectValidator::alpha(self::ACCENTS),
+            'city' => RespectValidator::alpha(self::ACCENTS." -"),
             'distance' => RespectValidator::intVal(),
             'latitude' => RespectValidator::floatVal()->positive(),
             'longitude' => RespectValidator::floatVal()->positive(),
