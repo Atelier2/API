@@ -10,4 +10,10 @@ class Picture extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     public $incrementing = false;
+
+    function inSeries()
+    {
+        return $this->belongsToMany('GeoQuizz\Backoffice\model\Series', "series_pictures", "id_picture", "id")
+            ->withPivot('id');
+    }
 }

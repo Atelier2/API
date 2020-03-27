@@ -673,4 +673,57 @@ class BackofficeController
             return $rs;
         }
     }
+
+    /**
+     * @api {get} http://api.backoffice.local:19280/serie/{id}/pictures Récupérer toutes les photos pas associée à une série.
+     * @apiName dede
+     * @apiGroup Picture
+     * @apiExample {curl} Example usage:
+     *  curl http://api.backoffice.local:19280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *  }
+     * @apiParam {Number} Id id de la série dans laquelle est cherché.
+     * @apiSuccessExample Success-Response:
+     * {
+     * "type": "collection",
+     * "pictures": [
+     *      {
+     *          "id": "6770cc1c-49dc-48e0-8822-5ce6e72151f8"
+     *      },
+     *      {
+     *          "id": "6770cc1c-49dc-48e0-8822-5ce6e72151f9"
+     *      }
+     *   ]
+     * }
+     */
+    public function notAssociatedPictures(Request $req, Response $resp, array $args)
+    {
+        $id = $req->getAttribute("id");
+        $token = $req->getAttribute("token");
+        $user = user::find($token->uid);
+        $pictures = picture::whereDoesntHave("inSeries", function ($q) use ($id) {
+            $q->where("series_pictures.id", "=", $id);
+        })->get();
+        foreach ($pictures as $picture) {
+            if ($picture->id_user == $user->id) {
+                $dede = array();
+                $dede["id"] = $picture->id;
+                $order["pictures"][] = $dede;
+            }
+        }
+        if (empty($order)) {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("toutes vos photos sont associées à cette série"));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "pictures" => $order["pictures"]]));
+            return $rs;
+        }
+    }
 }
