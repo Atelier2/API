@@ -728,4 +728,52 @@ class BackofficeController
             return $rs;
         }
     }
+
+    /**
+     * @api {get} http://51.91.8.97:18280/serie/{id}/pics Récupérer toutes les photos associée à une série.
+     * @apiName pepe
+     * @apiGroup Picture
+     * @apiExample {curl} Example usage:
+     *  curl http://51.91.8.97:18280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pics
+     * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
+     * @apiHeaderExample {json} Header-Example:
+     *  {
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19".
+     *  }
+     * @apiParam {Number} Id id de la série.
+     * @apiSuccessExample Success-Response:
+     * {
+     *   "type": "collection",
+     *   "count": 1
+     *   "pictures": [
+     *         {
+     *           "id": "09dc81ea-d6b7-460d-a9cb-a50bf7b2a132",
+     *           "description": "atsumare",
+     *           "latitude": "48.8738° N",
+     *           "longitude": "2.2950° E",
+     *           "link": "https://www.w3schools.com/php/filter_sanitize_url.asp",
+     *           "created_at": "2020-03-25 21:39:58",
+     *           "updated_at": "2020-03-25 21:39:58",
+     *           "id_user": "d2b66cbc-a1f9-4e80-bb22-65b07455433c",
+     *         }
+     *    ]
+     * }
+     */
+    public function AssociatedPictures(Request $req, Response $resp, array $args)
+    {
+        $token = $req->getAttribute("token");
+        if ($series = series::find($args["id"]) and $series->id_user == $token->uid) {
+            $pictures = $series->series_pictures()->get();
+            $count = count($pictures);
+            $rs = $resp->withStatus(200)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode(["type" => "collection", "count" => $count, "pictures" => $pictures]));
+            return $rs;
+        } else {
+            $rs = $resp->withStatus(400)
+                ->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode("cette série n'existe pas"));
+            return $rs;
+        }
+    }
 }
