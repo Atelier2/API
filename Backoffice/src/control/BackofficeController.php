@@ -22,7 +22,7 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signin se connecter avec un membre.
+     * @api {post} http://51.91.8.97:18280/user/signin se connecter avec un membre.
      * @apiName userSignin
      * @apiGroup User
      * @apiHeader {Basic_Auth} Authorization  email et mot de passe de l'utilisateur.
@@ -69,11 +69,11 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/user/signup Creer un membre.
+     * @api {post} http://51.91.8.97:18280/user/signup Creer un membre.
      * @apiName userSignup
      * @apiGroup User
      * @apiExample {curl} Example usage:
-     *     curl -X POST http://api.backoffice.local:19280/user/signup
+     *     curl -X POST http://51.91.8.97:18280/user/signup
      * @apiParam {String} firstname Le prenom du membre.
      * @apiParam {String} lastname Le nom du membre.
      * @apiParam {String} email l'addresse email du membre.
@@ -137,28 +137,28 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/series Creer une Serie.
+     * @api {post} http://51.91.8.97:18280/series Creer une Serie.
      * @apiName insertSerie
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
-     *  curl -X POST http://api.backoffice.local:19280/series
+     *  curl -X POST http://51.91.8.97:18280/series
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {String} city La ville de la serie.
      * @apiParam {Number} distance De la serie.
-     * @apiParam {String} latitude coordonnées gps latitude.
-     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} latitude coordonnées gps latitude.
+     * @apiParam {Number} longitude coordonnées gps longitude.
      * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
      *        "city" : "Paris",
      * "distance" : 1000,
-     * "latitude" : "48.8566° N",
-     * "longitude" : "2.3522° E",
+     * "latitude" : 48.8566,
+     * "longitude" : 2.3522,
      * "zoom" : 7,
      * "nb_pictures" : 4
      *     }
@@ -201,25 +201,25 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/pictures Envoyer une photo.
+     * @api {post} http://51.91.8.97:18280/pictures Envoyer une photo.
      * @apiName insertPicture
      * @apiGroup Picture
      * @apiExample {curl} Example usage:
-     *  curl -X POST http://api.backoffice.local:19280/pictures
+     *  curl -X POST http://51.91.8.97:18280/pictures
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {String} description description de la photo.
-     * @apiParam {String} latitude coordonnées gps latitude.
-     * @apiParam {String} longitude coordonnées gps longitude.
-     * @apiParam {URL} link liens de la photo vers Clodinary.
+     * @apiParam {Number} latitude coordonnées gps latitude.
+     * @apiParam {Number} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers ImgBB.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Tour Eiffel",
-     * "latitude" : "48.8584° N",
-     * "longitude" : "2.2945° E",
+     * "latitude" : 48.8584,
+     * "longitude" : 2.2945,
      * "link" : "https://www.w3schools.com/php/filter_sanitize_url.asp"
      *     }
      * @apiSuccessExample Success-Response:
@@ -258,15 +258,15 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/series/{id}/pictures Associer des photos a une series.
+     * @api {post} http://51.91.8.97:18280/series/{id}/pictures Associer des photos a une series.
      * @apiName seriesPictures
      * @apiGroup Series
      * @apiExample {curl} Example usage:
-     *     curl -X POST http://api.backoffice.local:19280/series/53e5def2-63ee-4531-ac9f-d12a80af9247/pictures
+     *     curl -X POST http://51.91.8.97:18280/series/53e5def2-63ee-4531-ac9f-d12a80af9247/pictures
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {Number} Id id de la série a associé.
      * @apiParam {Array} Pictures Tableau contenant les Ids des photos a associé.
@@ -324,29 +324,29 @@ class BackofficeController
     }
 
     /**
-     * @api {put} http://api.backoffice.local:19280/series/{id} Modifier une Serie.
+     * @api {put} http://51.91.8.97:18280/series/{id} Modifier une Serie.
      * @apiName updateSerie
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
-     *  curl -X PUT http://api.backoffice.local:19280/series/5451d518-6863-409b-af77-0c29119b931c
+     *  curl -X PUT http://51.91.8.97:18280/series/5451d518-6863-409b-af77-0c29119b931c
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {Number} id id de la série a modifié.
      * @apiParam {String} city La ville de la serie.
      * @apiParam {Number} distance De la serie.
-     * @apiParam {String} latitude coordonnées gps latitude.
-     * @apiParam {String} longitude coordonnées gps longitude.
+     * @apiParam {Number} latitude coordonnées gps latitude.
+     * @apiParam {Number} longitude coordonnées gps longitude.
      * @apiParam {Number} zoom l'indice de zoom.
      * @apiParam {Number} nb_pictures Le nombre de photos associe à cette série.
      * @apiParamExample {json} Request-Example:
      *     {
      *        "city" : "Bordeaux",
      * "distance" : 1000,
-     * "latitude" : "44.8378° N",
-     * "longitude" : "0.5792° W",
+     * "latitude" : 44.8378,
+     * "longitude" : 0.5792,
      * "zoom" : 7,
      * "nb_pictures" : 7
      *     }
@@ -393,26 +393,26 @@ class BackofficeController
     }
 
     /**
-     * @api {put} http://api.backoffice.local:19280/pictures/{id} Modifier une photo.
+     * @api {put} http://51.91.8.97:18280/pictures/{id} Modifier une photo.
      * @apiName updatePicture
      * @apiGroup Picture
      * @apiExample {curl} Example usage:
-     *  curl -X PUT http://api.backoffice.local:19280/pictures/3a192e17-e853-41af-80b7-c457e860e166
+     *  curl -X PUT http://51.91.8.97:18280/pictures/3a192e17-e853-41af-80b7-c457e860e166
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {Number} id id de la photo a modifié.
      * @apiParam {String} description description de la photo.
-     * @apiParam {String} latitude coordonnées gps latitude.
-     * @apiParam {String} longitude coordonnées gps longitude.
-     * @apiParam {URL} link liens de la photo vers Clodinary.
+     * @apiParam {Number} latitude coordonnées gps latitude.
+     * @apiParam {Number} longitude coordonnées gps longitude.
+     * @apiParam {URL} link liens de la photo vers ImgBB.
      * @apiParamExample {json} Request-Example:
      *     {
      * "description" : "Arc de Triomphe",
-     * "latitude" : "48.8738° N",
-     * "longitude" : "2.2950° E",
+     * "latitude" : 48.8738,
+     * "longitude" : 2.2950,
      * "link" : "https://www.w3schools.com/php/filter_sanitize_url.asp"
      *     }
      * @apiSuccessExample Success-Response:
@@ -461,15 +461,15 @@ class BackofficeController
     }
 
     /**
-     * @api {get} http://api.backoffice.local:19280/series Récupérer toutes les series.
+     * @api {get} http://51.91.8.97:18280/series Récupérer toutes les series.
      * @apiName getSeries
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
-     *  curl http://api.backoffice.local:19280/series
+     *  curl http://51.91.8.97:18280/series
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiSuccessExample Success-Response:
      * {
@@ -479,8 +479,8 @@ class BackofficeController
      * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
      * "city": "test",
      * "distance": 2121,
-     * "latitude": "test",
-     * "longitude": "test",
+     * "latitude": 48.8566,
+     * "longitude": 2.2950,
      * "zoom": 7,
      * "nb_pictures": 4,
      * "created_at": "2020-03-21 13:22:55",
@@ -491,8 +491,8 @@ class BackofficeController
      * "id": "52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f",
      * "city": "test",
      * "distance": 2121,
-     * "latitude": "test",
-     * "longitude": "test",
+     * "latitude": 48.8566,
+     * "longitude": 2.2950,
      * "zoom": 7,
      * "nb_pictures": 4,
      * "created_at": "2020-03-21 18:56:38",
@@ -523,15 +523,15 @@ class BackofficeController
     }
 
     /**
-     * @api {get} http://api.backoffice.local:19280/series/{id} Récupérer une serie.
+     * @api {get} http://51.91.8.97:18280/series/{id} Récupérer une serie.
      * @apiName getSerie
      * @apiGroup Serie
      * @apiExample {curl} Example usage:
-     *  curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2
+     *  curl http://51.91.8.97:18280/series/163effe5-b150-4e2d-8b65-91fef987dcb2
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {String}  id identifiant de la série recherchée.
      * @apiSuccessExample Success-Response:
@@ -541,8 +541,8 @@ class BackofficeController
      * "id": "163effe5-b150-4e2d-8b65-91fef987dcb2",
      * "city": "test",
      * "distance": 2121,
-     * "latitude": "test",
-     * "longitude": "test",
+     * "latitude": 48.8566,
+     * "longitude": 48.8566,
      * "zoom": 7,
      * "nb_pictures": 4,
      * "created_at": "2020-03-21 13:22:55",
@@ -618,15 +618,15 @@ class BackofficeController
     }
 
     /**
-     * @api {post} http://api.backoffice.local:19280/serie/{id}/picture Associer une photo a une serie.
+     * @api {post} http://51.91.8.97:18280/serie/{id}/picture Associer une photo a une serie.
      * @apiName seriePicture
      * @apiGroup Series
      * @apiExample {curl} Example usage:
-     *     curl -X POST http://api.backoffice.local:19280/serie/53e5def2-63ee-4531-ac9f-d12a80af9247/picture
+     *     curl -X POST http://51.91.8.97:18280/serie/53e5def2-63ee-4531-ac9f-d12a80af9247/picture
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {Number} id id de la série a associé.
      * @apiParam {Number} Id Id de la photo a associé.
@@ -675,15 +675,15 @@ class BackofficeController
     }
 
     /**
-     * @api {get} http://api.backoffice.local:19280/serie/{id}/pictures Récupérer toutes les photos pas associée à une série.
+     * @api {get} http://51.91.8.97:18280/serie/{id}/pictures Récupérer toutes les photos pas associée à une série.
      * @apiName dede
      * @apiGroup Picture
      * @apiExample {curl} Example usage:
-     *  curl http://api.backoffice.local:19280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures
+     *  curl http://51.91.8.97:18280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures
      * @apiHeader {BearerToken} Authorization  JWT de l'utilisateur connecte.
      * @apiHeaderExample {json} Header-Example:
      *  {
-     *       "Token": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.
+     *       "Token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19"
      *  }
      * @apiParam {Number} Id id de la série dans laquelle est cherché.
      * @apiSuccessExample Success-Response:
@@ -749,8 +749,8 @@ class BackofficeController
      *         {
      *           "id": "09dc81ea-d6b7-460d-a9cb-a50bf7b2a132",
      *           "description": "atsumare",
-     *           "latitude": "48.8738° N",
-     *           "longitude": "2.2950° E",
+     *           "latitude": 48.8738,
+     *           "longitude": 2.2950,
      *           "link": "https://www.w3schools.com/php/filter_sanitize_url.asp",
      *           "created_at": "2020-03-25 21:39:58",
      *           "updated_at": "2020-03-25 21:39:58",

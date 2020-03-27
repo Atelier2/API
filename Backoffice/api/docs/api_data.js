@@ -1,14 +1,14 @@
 define({ "api": [
   {
     "type": "get",
-    "url": "http://api.backoffice.local:19280/serie/{id}/pictures",
+    "url": "http://51.91.8.97:18280/serie/{id}/pictures",
     "title": "Récupérer toutes les photos pas associée à une série.",
     "name": "dede",
     "group": "Picture",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl http://api.backoffice.local:19280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures",
+        "content": "curl http://51.91.8.97:18280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures",
         "type": "curl"
       }
     ],
@@ -27,7 +27,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -60,14 +60,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/pictures",
+    "url": "http://51.91.8.97:18280/pictures",
     "title": "Envoyer une photo.",
     "name": "insertPicture",
     "group": "Picture",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/pictures",
+        "content": "curl -X POST http://51.91.8.97:18280/pictures",
         "type": "curl"
       }
     ],
@@ -86,7 +86,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -103,14 +103,14 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
@@ -120,14 +120,14 @@ define({ "api": [
             "type": "URL",
             "optional": false,
             "field": "link",
-            "description": "<p>liens de la photo vers Clodinary.</p>"
+            "description": "<p>liens de la photo vers ImgBB.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "    {\n\"description\" : \"Tour Eiffel\",\n\"latitude\" : \"48.8584° N\",\n\"longitude\" : \"2.2945° E\",\n\"link\" : \"https://www.w3schools.com/php/filter_sanitize_url.asp\"\n    }",
+          "content": "    {\n\"description\" : \"Tour Eiffel\",\n\"latitude\" : 48.8584,\n\"longitude\" : 2.2945,\n\"link\" : \"https://www.w3schools.com/php/filter_sanitize_url.asp\"\n    }",
           "type": "json"
         }
       ]
@@ -195,7 +195,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n  \"type\": \"collection\",\n  \"count\": 1\n  \"pictures\": [\n        {\n          \"id\": \"09dc81ea-d6b7-460d-a9cb-a50bf7b2a132\",\n          \"description\": \"atsumare\",\n          \"latitude\": \"48.8738° N\",\n          \"longitude\": \"2.2950° E\",\n          \"link\": \"https://www.w3schools.com/php/filter_sanitize_url.asp\",\n          \"created_at\": \"2020-03-25 21:39:58\",\n          \"updated_at\": \"2020-03-25 21:39:58\",\n          \"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\",\n        }\n   ]\n}",
+          "content": "{\n  \"type\": \"collection\",\n  \"count\": 1\n  \"pictures\": [\n        {\n          \"id\": \"09dc81ea-d6b7-460d-a9cb-a50bf7b2a132\",\n          \"description\": \"atsumare\",\n          \"latitude\": 48.8738,\n          \"longitude\": 2.2950,\n          \"link\": \"https://www.w3schools.com/php/filter_sanitize_url.asp\",\n          \"created_at\": \"2020-03-25 21:39:58\",\n          \"updated_at\": \"2020-03-25 21:39:58\",\n          \"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\",\n        }\n   ]\n}",
           "type": "json"
         }
       ]
@@ -206,14 +206,14 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "http://api.backoffice.local:19280/pictures/{id}",
+    "url": "http://51.91.8.97:18280/pictures/{id}",
     "title": "Modifier une photo.",
     "name": "updatePicture",
     "group": "Picture",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X PUT http://api.backoffice.local:19280/pictures/3a192e17-e853-41af-80b7-c457e860e166",
+        "content": "curl -X PUT http://51.91.8.97:18280/pictures/3a192e17-e853-41af-80b7-c457e860e166",
         "type": "curl"
       }
     ],
@@ -232,7 +232,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -256,14 +256,14 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
@@ -273,14 +273,14 @@ define({ "api": [
             "type": "URL",
             "optional": false,
             "field": "link",
-            "description": "<p>liens de la photo vers Clodinary.</p>"
+            "description": "<p>liens de la photo vers ImgBB.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "    {\n\"description\" : \"Arc de Triomphe\",\n\"latitude\" : \"48.8738° N\",\n\"longitude\" : \"2.2950° E\",\n\"link\" : \"https://www.w3schools.com/php/filter_sanitize_url.asp\"\n    }",
+          "content": "    {\n\"description\" : \"Arc de Triomphe\",\n\"latitude\" : 48.8738,\n\"longitude\" : 2.2950,\n\"link\" : \"https://www.w3schools.com/php/filter_sanitize_url.asp\"\n    }",
           "type": "json"
         }
       ]
@@ -300,14 +300,14 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "http://api.backoffice.local:19280/series/{id}",
+    "url": "http://51.91.8.97:18280/series/{id}",
     "title": "Récupérer une serie.",
     "name": "getSerie",
     "group": "Serie",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl http://api.backoffice.local:19280/series/163effe5-b150-4e2d-8b65-91fef987dcb2",
+        "content": "curl http://51.91.8.97:18280/series/163effe5-b150-4e2d-8b65-91fef987dcb2",
         "type": "curl"
       }
     ],
@@ -326,7 +326,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -348,7 +348,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n\"type\": \"collection\",\n\"serie\": {\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n}",
+          "content": "{\n\"type\": \"collection\",\n\"serie\": {\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": 48.8566,\n\"longitude\": 48.8566,\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n}",
           "type": "json"
         }
       ]
@@ -359,14 +359,14 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "http://api.backoffice.local:19280/series",
+    "url": "http://51.91.8.97:18280/series",
     "title": "Récupérer toutes les series.",
     "name": "getSeries",
     "group": "Serie",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl http://api.backoffice.local:19280/series",
+        "content": "curl http://51.91.8.97:18280/series",
         "type": "curl"
       }
     ],
@@ -385,7 +385,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -394,7 +394,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n\"type\": \"collection\",\n\"series\": [\n{\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n},\n{\n\"id\": \"52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": \"test\",\n\"longitude\": \"test\",\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 18:56:38\",\n\"updated_at\": \"2020-03-21 18:56:38\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n]\n}",
+          "content": "{\n\"type\": \"collection\",\n\"series\": [\n{\n\"id\": \"163effe5-b150-4e2d-8b65-91fef987dcb2\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": 48.8566,\n\"longitude\": 2.2950,\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 13:22:55\",\n\"updated_at\": \"2020-03-21 13:22:55\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n},\n{\n\"id\": \"52e70cc6-68fe-4de3-ada3-e59c3c2b5f2f\",\n\"city\": \"test\",\n\"distance\": 2121,\n\"latitude\": 48.8566,\n\"longitude\": 2.2950,\n\"zoom\": 7,\n\"nb_pictures\": 4,\n\"created_at\": \"2020-03-21 18:56:38\",\n\"updated_at\": \"2020-03-21 18:56:38\",\n\"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\"\n}\n]\n}",
           "type": "json"
         }
       ]
@@ -405,14 +405,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/series",
+    "url": "http://51.91.8.97:18280/series",
     "title": "Creer une Serie.",
     "name": "insertSerie",
     "group": "Serie",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/series",
+        "content": "curl -X POST http://51.91.8.97:18280/series",
         "type": "curl"
       }
     ],
@@ -431,7 +431,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -455,14 +455,14 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
@@ -486,7 +486,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "    {\n       \"city\" : \"Paris\",\n\"distance\" : 1000,\n\"latitude\" : \"48.8566° N\",\n\"longitude\" : \"2.3522° E\",\n\"zoom\" : 7,\n\"nb_pictures\" : 4\n    }",
+          "content": "    {\n       \"city\" : \"Paris\",\n\"distance\" : 1000,\n\"latitude\" : 48.8566,\n\"longitude\" : 2.3522,\n\"zoom\" : 7,\n\"nb_pictures\" : 4\n    }",
           "type": "json"
         }
       ]
@@ -506,14 +506,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/serie/{id}/picture",
+    "url": "http://51.91.8.97:18280/serie/{id}/picture",
     "title": "Associer une photo a une serie.",
     "name": "seriePicture",
     "group": "Series",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/serie/53e5def2-63ee-4531-ac9f-d12a80af9247/picture",
+        "content": "curl -X POST http://51.91.8.97:18280/serie/53e5def2-63ee-4531-ac9f-d12a80af9247/picture",
         "type": "curl"
       }
     ],
@@ -532,7 +532,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -579,14 +579,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/series/{id}/pictures",
+    "url": "http://51.91.8.97:18280/series/{id}/pictures",
     "title": "Associer des photos a une series.",
     "name": "seriesPictures",
     "group": "Series",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/series/53e5def2-63ee-4531-ac9f-d12a80af9247/pictures",
+        "content": "curl -X POST http://51.91.8.97:18280/series/53e5def2-63ee-4531-ac9f-d12a80af9247/pictures",
         "type": "curl"
       }
     ],
@@ -605,7 +605,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -652,14 +652,14 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "http://api.backoffice.local:19280/series/{id}",
+    "url": "http://51.91.8.97:18280/series/{id}",
     "title": "Modifier une Serie.",
     "name": "updateSerie",
     "group": "Serie",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X PUT http://api.backoffice.local:19280/series/5451d518-6863-409b-af77-0c29119b931c",
+        "content": "curl -X PUT http://51.91.8.97:18280/series/5451d518-6863-409b-af77-0c29119b931c",
         "type": "curl"
       }
     ],
@@ -678,7 +678,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Header-Example:",
-          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\"\n}",
           "type": "json"
         }
       ]
@@ -709,14 +709,14 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "latitude",
             "description": "<p>coordonnées gps latitude.</p>"
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
             "field": "longitude",
             "description": "<p>coordonnées gps longitude.</p>"
@@ -740,7 +740,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "    {\n       \"city\" : \"Bordeaux\",\n\"distance\" : 1000,\n\"latitude\" : \"44.8378° N\",\n\"longitude\" : \"0.5792° W\",\n\"zoom\" : 7,\n\"nb_pictures\" : 7\n    }",
+          "content": "    {\n       \"city\" : \"Bordeaux\",\n\"distance\" : 1000,\n\"latitude\" : 44.8378,\n\"longitude\" : 0.5792,\n\"zoom\" : 7,\n\"nb_pictures\" : 7\n    }",
           "type": "json"
         }
       ]
@@ -760,7 +760,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/user/signin",
+    "url": "http://51.91.8.97:18280/user/signin",
     "title": "se connecter avec un membre.",
     "name": "userSignin",
     "group": "User",
@@ -803,14 +803,14 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "http://api.backoffice.local:19280/user/signup",
+    "url": "http://51.91.8.97:18280/user/signup",
     "title": "Creer un membre.",
     "name": "userSignup",
     "group": "User",
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -X POST http://api.backoffice.local:19280/user/signup",
+        "content": "curl -X POST http://51.91.8.97:18280/user/signup",
         "type": "curl"
       }
     ],

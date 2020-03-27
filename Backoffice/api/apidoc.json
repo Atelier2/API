@@ -1,9 +1,9 @@
 {
   "name": "GeoQuizz - BackOffice API",
   "version": "0.0.0",
-  "description": "API pour la WebApp de jeu en VueJS.",
+  "description": "API pour le Backoffice.",
   "apidoc": {
     "title": "GeoQuizz - BackOffice API",
-    "url" : "https://github.com/Atelier2/API/tree/master/Backoffice"
+    "url": "https://github.com/Atelier2/API/tree/master/Backoffice"
   }
 }
