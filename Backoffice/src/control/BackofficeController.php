@@ -711,6 +711,8 @@ class BackofficeController
             if ($picture->id_user == $user->id) {
                 $dede = array();
                 $dede["id"] = $picture->id;
+                $dede["description"] = $picture->description;
+                $dede["link"] = $picture->link;
                 $order["pictures"][] = $dede;
             }
         }
