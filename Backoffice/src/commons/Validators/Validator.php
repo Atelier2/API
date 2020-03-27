@@ -6,18 +6,22 @@ use \Respect\Validation\Validator as v;
 
 class Validator
 {
+    const ACCENTS = "À à Â â Ä ä Ç ç É é È è Ê ê Ë ë Î î Ï ï Ô ô Ö ö Ù ù Û û Ü ü";
+
+    const PONCTUATION = ". ; : ! ? , - _ \" / ' ( ) [ ] { } + = % * $ € £ < > & # @";
+
     public static function validatorsUsers()
     {
         return
             [
-                'firstname' => v::StringType()->notEmpty()->alpha(),
-                'lastname' => v::StringType()->notEmpty()->alpha(),
+                'firstname' => v::alnum(self::ACCENTS . " " . self::PONCTUATION),
+                'lastname' => v::alnum(self::ACCENTS . " " . self::PONCTUATION),
                 'email' => v::email()->notEmpty(),
                 'phone' => v::phone()->notEmpty(),
                 'password' => v::notEmpty(),
                 'street_number' => v::intType()->notEmpty(),
-                'street' => v::StringType()->notEmpty()->alpha(),
-                'city' => v::stringType()->notEmpty()->alpha(),
+                'street' => v::alnum(self::ACCENTS . " " . self::PONCTUATION),
+                'city' => v::alnum(self::ACCENTS . " " . self::PONCTUATION),
                 'zip_code' => v::intType()->notEmpty(),
             ];
     }
@@ -26,10 +30,10 @@ class Validator
     {
         return
             [
-                'city' => v::StringType()->notEmpty()->alpha(),
+                'city' => v::alpha(self::ACCENTS . " -"),
                 'distance' => v::intType()->notEmpty(),
-                'latitude' => v::StringType()->notEmpty(),
-                'longitude' => v::StringType()->notEmpty(),
+                'latitude' => v::floatType()->notEmpty(),
+                'longitude' => v::floatType()->notEmpty(),
                 'zoom' => v::intType()->notEmpty(),
                 'nb_pictures' => v::numeric(),
             ];
@@ -39,9 +43,9 @@ class Validator
     {
         return
             [
-                'description' => v::StringType()->notEmpty(),
-                'latitude' => v::notEmpty(),
-                'longitude' => v::notEmpty(),
+                'description' => v::alnum(self::ACCENTS . " " . self::PONCTUATION),
+                'latitude' => v::floatType()->notEmpty(),
+                'longitude' => v::floatType()->notEmpty(),
                 'link' => v::url()->notEmpty(),
             ];
     }
@@ -54,5 +58,5 @@ class Validator
                     ->key('id', v::stringType()->notEmpty()))
             ];
     }
-    
+
 }

@@ -146,6 +146,65 @@ define({ "api": [
     "groupTitle": "Picture"
   },
   {
+    "type": "get",
+    "url": "http://51.91.8.97:18280/serie/{id}/pics",
+    "title": "Récupérer toutes les photos associée à une série.",
+    "name": "pepe",
+    "group": "Picture",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl http://51.91.8.97:18280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pics",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "BearerToken",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>JWT de l'utilisateur connecte.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n     \"Token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19\".\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Id",
+            "description": "<p>id de la série.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n  \"type\": \"collection\",\n  \"count\": 1\n  \"pictures\": [\n        {\n          \"id\": \"09dc81ea-d6b7-460d-a9cb-a50bf7b2a132\",\n          \"description\": \"atsumare\",\n          \"latitude\": \"48.8738° N\",\n          \"longitude\": \"2.2950° E\",\n          \"link\": \"https://www.w3schools.com/php/filter_sanitize_url.asp\",\n          \"created_at\": \"2020-03-25 21:39:58\",\n          \"updated_at\": \"2020-03-25 21:39:58\",\n          \"id_user\": \"d2b66cbc-a1f9-4e80-bb22-65b07455433c\",\n        }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../src/control/BackofficeController.php",
+    "groupTitle": "Picture"
+  },
+  {
     "type": "put",
     "url": "http://api.backoffice.local:19280/pictures/{id}",
     "title": "Modifier une photo.",

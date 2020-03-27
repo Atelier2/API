@@ -98,4 +98,8 @@ $app->get('/serie/{id}/pictures[/]', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->notAssociatedPictures($rq, $rs, $args);
 })->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
 
+$app->get('/serie/{id}/pics[/]', function ($rq, $rs, $args) {
+    return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->AssociatedPictures($rq, $rs, $args);
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
+
 $app->run();
