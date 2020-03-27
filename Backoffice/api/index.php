@@ -92,7 +92,7 @@ $app->post('/serie/{id}/picture[/]', function ($rq, $rs, $args) {
 })->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkHeaderOrigin')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
 
 $app->post('/user/check-token[/]', function ($rq, $rs, $args) {
-})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':validJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
+})->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':validJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':headersCORS')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':decodeJWT')->add(\GeoQuizz\Backoffice\commons\middlewares\Middleware::class . ':checkJWT');
 
 $app->get('/serie/{id}/pictures[/]', function ($rq, $rs, $args) {
     return (new \GeoQuizz\Backoffice\control\BackofficeController($this))->notAssociatedPictures($rq, $rs, $args);
