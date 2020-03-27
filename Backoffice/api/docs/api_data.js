@@ -1,5 +1,64 @@
 define({ "api": [
   {
+    "type": "get",
+    "url": "http://api.backoffice.local:19280/serie/{id}/pictures",
+    "title": "Récupérer toutes les photos pas associée à une série.",
+    "name": "dede",
+    "group": "Picture",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl http://api.backoffice.local:19280/serie/163effe5-b150-4e2d-8b65-91fef987dcb2/pictures",
+        "type": "curl"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "BearerToken",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>JWT de l'utilisateur connecte.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n     \"Token\": eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ19.\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "Id",
+            "description": "<p>id de la série dans laquelle est cherché.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n\"type\": \"collection\",\n\"pictures\": [\n     {\n         \"id\": \"6770cc1c-49dc-48e0-8822-5ce6e72151f8\"\n     },\n     {\n         \"id\": \"6770cc1c-49dc-48e0-8822-5ce6e72151f9\"\n     }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "../src/control/BackofficeController.php",
+    "groupTitle": "Picture"
+  },
+  {
     "type": "post",
     "url": "http://api.backoffice.local:19280/pictures",
     "title": "Envoyer une photo.",
